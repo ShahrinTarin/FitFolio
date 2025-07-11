@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { use,  useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
@@ -7,50 +7,64 @@ import { AuthContext } from '../Provider/AuthProvider';
 import { motion } from 'framer-motion';
 
 const Login = () => {
-  const { signIn, setUser, googleLogIn, email, setEmail } = useContext(AuthContext);
-  const [showPass, setShowPass] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
+ const { signIn, setUser, googleLogIn, email, setEmail,setLoading } = use(AuthContext)
+    const [showPass, setShowPass] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const handleGoogleLogIn = () => {
+        googleLogIn()
+            .then((result) => {
+                const user = result.user
+                setUser(user)
+                
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "You have been LogIn with Google Successfully",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                navigate(`${location.state ? location.state : '/'}`)
 
-  const showError = (message) => {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: message,
-    });
-  };
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                console.log(errorCode);
+                //  const errorMessage = error.message;
+              
+            });
+    }
 
-  const handleGoogleLogIn = () => {
-    googleLogIn()
-      .then((result) => {
-        setUser(result.user);
-        Swal.fire({
-          icon: 'success',
-          title: 'Logged in with Google!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate(location.state || '/');
-      })
-      .catch((err) => showError(err.code));
-  };
+    const handleLogIn = async(e) => {
+        e.preventDefault()
+        const form = e.target
+        const password = form.password.value
+        const email = form.email.value
+         try {
+            setLoading(true);
+            const result = await signIn(email, password);
+            setUser(result.user);
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Logged in successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            navigate(`${location.state ? location.state : '/'}`)
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                title: "Error",
+                text: "Invalid credentials",
+                icon: "error",
+                timer: 1500
+            });
+        } finally {
+            setLoading(false);
+        }
 
-  const handleLogIn = (e) => {
-    e.preventDefault();
-    signIn(e.target.email.value, e.target.password.value)
-      .then((result) => {
-        setUser(result.user);
-        Swal.fire({
-          icon: 'success',
-          title: 'Logged in successfully!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate(location.state || '/');
-      })
-      .catch((err) => showError(err.code));
-  };
-
+    }
   return (
     <div className="relative min-h-[calc(100vh-84px)] flex items-center justify-center bg-black overflow-hidden">
       {/* ---- Animated Waves ---- */}
