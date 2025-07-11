@@ -19,7 +19,7 @@ const Hero = () => {
         </h1>
 
         {/* CTA */}
-        <button className="bg-lime-400 text-black font-semibold py-3 px-6 rounded-full hover:bg-lime-500 transition">
+        <button className="bg-lime-400 cursor-pointer text-black font-semibold py-3 px-6 rounded-full hover:bg-lime-500 transition">
           Let&apos;s Start &gt;&gt;&gt;
         </button>
       </div>
