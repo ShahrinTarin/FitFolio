@@ -1,8 +1,24 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link, NavLink } from "react-router";
-const Navbar = ({ user, handleLogout }) => {
+import { AuthContext } from "../Provider/AuthProvider";
+import Swal from "sweetalert2";
+const Navbar = () => {
+    const {user,logOut}=use(AuthContext)
     const [isOpen, setIsOpen] = useState(false);
-
+ const handleLogOut = () => {
+        logOut().then(() => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "You Logged Out Successfully",
+                showConfirmButton: false,
+                timer: 1500
+            });
+           
+        }).catch(() => {
+            // An error happened.
+        });
+    }
     const navLinks = [
         { name: "Home", path: "/" },
         { name: "All Trainers", path: "/trainers" },
@@ -21,7 +37,7 @@ const Navbar = ({ user, handleLogout }) => {
                 </g>
 
 
-                <text x="50" y="40" font-family="Poppins, Arial, sans-serif" font-weight="bold" font-size="28" fill="#C4F93F">
+                <text x="50" y="40" fontFamily="Poppins, Arial, sans-serif" fontWeight="bold" fontSize="28" fill="#C4F93F">
                     FitFolio
                 </text>
             </svg></Link> </div>
@@ -65,7 +81,7 @@ const Navbar = ({ user, handleLogout }) => {
                             className="w-8 h-8 rounded-full border-2 border-lime-400"
                         />
                         <button
-                            onClick={handleLogout}
+                            onClick={handleLogOut}
                             className="text-lime-400 border border-lime-400 px-4 py-2 rounded-full hover:bg-lime-400 hover:text-black transition font-semibold"
                         >
                             Logout

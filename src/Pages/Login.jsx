@@ -8,10 +8,17 @@ import { motion } from 'framer-motion';
 
 const Login = () => {
   const { signIn, setUser, googleLogIn, email, setEmail } = useContext(AuthContext);
-  const [error, setError] = useState('');
   const [showPass, setShowPass] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const showError = (message) => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: message,
+    });
+  };
 
   const handleGoogleLogIn = () => {
     googleLogIn()
@@ -25,7 +32,7 @@ const Login = () => {
         });
         navigate(location.state || '/');
       })
-      .catch((err) => setError(err.code));
+      .catch((err) => showError(err.code));
   };
 
   const handleLogIn = (e) => {
@@ -41,7 +48,7 @@ const Login = () => {
         });
         navigate(location.state || '/');
       })
-      .catch((err) => setError(err.code));
+      .catch((err) => showError(err.code));
   };
 
   return (
@@ -94,9 +101,9 @@ const Login = () => {
         </path>
       </motion.svg>
 
-      {/* ---- Glassmorphic Card with Motion ---- */}
+      {/* ---- Glassmorphic Card ---- */}
       <motion.div
-        className="relative z-10 w-full md:w-1/2 max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl"
+        className="relative z-10 w-full m-5 my-5 lg:mx-0 lg:w-[100%] max-w-4xl grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl"
         initial={{ opacity: 0, scale: 0.9, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -166,8 +173,6 @@ const Login = () => {
                   {showPass ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                 </button>
               </div>
-
-              {error && <p className="text-sm text-red-400">{error}</p>}
 
               <motion.button
                 whileHover={{ scale: 1.03 }}
