@@ -4,6 +4,17 @@ import RootLayOut from "../LayOuts/RootLayOut";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import AllTrainers from "../Pages/AllTrainers";
+import DashboardLayout from "@/LayOuts/DashBoardLayout";
+import PrivateRoute from "@/Provider/PrivateRoute";
+import ActivityLog from "@/DashboardPages/ActivityLog";
+import AllNewsletters from "@/DashboardPages/AllNewsletters";
+import AllTrainer from "@/DashboardPages/AllTrainer";
+import AddClass from "@/DashboardPages/AddClass";
+import AppliedTrainers from "@/DashboardPages/AppliedTrainers";
+import Balance from "@/DashboardPages/Balance";
+import Profile from "@/DashboardPages/Profile";
+import BookedTrainer from "@/DashboardPages/BookedTrainer";
+import AddForum from "@/DashboardPages/AddForum";
 
 
 const router = createBrowserRouter([
@@ -32,7 +43,36 @@ const router = createBrowserRouter([
       },
     ]
 
-  }
+  },
+  
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      // Admin
+      { path: "newsletter", element: <AllNewsletters /> },
+      { path: "trainers", element: <AllTrainer /> },
+      { path: "applied-trainers", element: <AppliedTrainers /> },
+      { path: "balance", element: <Balance /> },
+      { path: "add-class", element: <AddClass /> },
+
+      // // Trainer
+      // { path: "manage-slots", element: <ManageSlots /> },
+      // { path: "add-slot", element: <AddSlot /> },
+
+      // // Shared
+      { path: "add-forum", element: <AddForum/> }, // Example
+
+      // // Member
+      { path: "activity-log", element: <ActivityLog /> },
+      { path: "profile", element: <Profile /> },
+      { path: "booked-trainer", element: <BookedTrainer /> },
+    ],
+  },
 ])
 
 export default router

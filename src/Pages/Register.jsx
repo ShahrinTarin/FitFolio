@@ -18,7 +18,7 @@ const Register = () => {
   // Mutation for saving user in MongoDB
   const registerMutation = useMutation({
     mutationFn: async (userInfo) => {
-      const res = await axios.post('http://localhost:3000/register', userInfo);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/register`, userInfo);
       if (res.status !== 200 && res.status !== 201) {
         throw new Error('Failed to register user');
       }
@@ -77,7 +77,7 @@ const Register = () => {
         name,
         email,
         photoURL: photo,
-        role: 'member',
+       
       };
 
       await registerMutation.mutateAsync(userInfo);

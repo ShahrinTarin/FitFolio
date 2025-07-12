@@ -1,11 +1,11 @@
 import React from 'react';
 
 const AllTrainers = () => {
-    return (
-        <div>
-         AllTrainers   
-        </div>
-    );
+  return (
+    <div>
+      trainers
+    </div>
+  );
 };
 
 export default AllTrainers;

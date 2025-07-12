@@ -37,7 +37,7 @@ const features = [
 const AboutSection = () => {
   return (
     <section
-      className="relative py-20 px-4 sm:px-8 md:px-12 lg:px-20 max-w-[95vw] mx-auto rounded-3xl shadow-xl backdrop-blur-md overflow-hidden"
+      className="relative py-20 px-4 sm:px-8 md:px-12 lg:px-20 max-w-full mx-auto  shadow-xl backdrop-blur-md overflow-hidden"
       style={{
         backgroundImage:
           "url('https://i.ibb.co/LztY3Sgc/flux-1-kontext-pro-makea-photo-like-th.png')",
@@ -46,7 +46,7 @@ const AboutSection = () => {
       }}
     >
       {/* Overlay for better text contrast */}
-      <div className="absolute inset-0 bg-black/70 rounded-3xl pointer-events-none"></div>
+      <div className="absolute inset-0 bg-black/70  pointer-events-none"></div>
 
       <div className="relative z-10">
         {/* Heading */}
