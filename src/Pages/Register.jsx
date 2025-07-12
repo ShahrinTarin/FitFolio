@@ -1,41 +1,42 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useLocation, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../Provider/AuthProvider';
 import { motion } from 'framer-motion';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import SocialLogin from '../Shared/SocialLogin';
 
 const Register = () => {
-  const { createUser, setUser, googleLogIn, updateUser } = useContext(AuthContext);
+  const { createUser, setUser,  updateUser } = useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const showError = (message) => {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: message,
-    });
-  };
+  // Mutation for saving user in MongoDB
+  const registerMutation = useMutation({
+    mutationFn: async (userInfo) => {
+      const res = await axios.post('http://localhost:3000/register', userInfo);
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Failed to register user');
+      }
+      return res.data;
+    },
+    onError: (error) => {
+      if (error.response?.status === 409) {
+        Swal.fire('Error', 'User already exists!', 'error');
+      } else {
+        Swal.fire('Error', error.message, 'error');
+      }
+    },
+  });
 
-  const handleGoogleLogIn = () => {
-    googleLogIn()
-      .then((result) => {
-        setUser(result.user);
-        Swal.fire({
-          icon: 'success',
-          title: 'Logged in with Google!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate(location.state || '/');
-      })
-      .catch((err) => showError(err.code));
-  };
+ 
 
-  const handleRegister = (e) => {
+  // Normal registration handler
+  const handleRegister = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -43,48 +44,56 @@ const Register = () => {
     const photo = form.photoURL.value;
     const password = form.password.value;
 
+    // Password validations
     const passDigitExpresion = /^(?=.*\d)/;
     const passLowerCaseExpresion = /(?=.*[a-z])/;
     const passUpperCaseExpresion = /(?=.*[A-Z])/;
     const passLongExpresion = /.{6,}$/;
     const passSpecialExpresion = /(?=.*[!@#$%^&*])/;
 
-    if (!passLongExpresion.test(password)) {
-      return showError('Password must be at least 6 characters long');
-    }
-    if (!passDigitExpresion.test(password)) {
-      return showError('Password must contain at least one digit');
-    }
-    if (!passLowerCaseExpresion.test(password)) {
-      return showError('Password must contain at least one lowercase letter');
-    }
-    if (!passUpperCaseExpresion.test(password)) {
-      return showError('Password must contain at least one uppercase letter');
-    }
-    if (!passSpecialExpresion.test(password)) {
-      return showError('Password must contain at least one special character');
-    }
+    if (!passLongExpresion.test(password))
+      return Swal.fire('Error', 'Password must be at least 6 characters long.', 'error');
+    if (!passDigitExpresion.test(password))
+      return Swal.fire('Error', 'Password must contain a digit.', 'error');
+    if (!passLowerCaseExpresion.test(password))
+      return Swal.fire('Error', 'Password must contain a lowercase letter.', 'error');
+    if (!passUpperCaseExpresion.test(password))
+      return Swal.fire('Error', 'Password must contain an uppercase letter.', 'error');
+    if (!passSpecialExpresion.test(password))
+      return Swal.fire('Error', 'Password must include a special character.', 'error');
 
-    createUser(email, password)
-      .then((result) => {
-        updateUser({ displayName: name, photoURL: photo })
-          .then(() => {
-            setUser({ ...result.user, displayName: name, photoURL: photo });
-          })
-          .catch((error) => {
-            showError(error.message);
-            setUser(result.user);
-          });
+    try {
+      const result = await createUser(email, password);
+      const user = result.user;
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Registered Successfully!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate(location.state || '/');
-      })
-      .catch((error) => showError(error.code));
+      try {
+        await updateUser({ displayName: name, photoURL: photo });
+        setUser({ ...user, displayName: name, photoURL: photo });
+      } catch (error) {
+        return Swal.fire('Profile Update Failed', error.message, 'error');
+      }
+
+      const userInfo = {
+        name,
+        email,
+        photoURL: photo,
+        role: 'member',
+      };
+
+      await registerMutation.mutateAsync(userInfo);
+
+      await Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Registered successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      navigate(location.state?.from || '/');
+    } catch (error) {
+      Swal.fire('Registration Failed', error.message, 'error');
+    }
   };
 
   return (
@@ -228,15 +237,8 @@ const Register = () => {
               <hr className="flex-grow border-gray-500" />
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleGoogleLogIn}
-              className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white/40 py-3 rounded-xl hover:bg-white/50 transition"
-            >
-              <FcGoogle size={22} />
-              <span className="font-semibold text-black text-base">Sign up with Google</span>
-            </motion.button>
+
+            <SocialLogin></SocialLogin>
 
             <p className="text-center text-sm mt-4 text-gray-300">
               Already have an account?{' '}

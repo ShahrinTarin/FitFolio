@@ -5,35 +5,14 @@ import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../Provider/AuthProvider';
 import { motion } from 'framer-motion';
+import SocialLogin from '../Shared/SocialLogin';
 
 const Login = () => {
- const { signIn, setUser, googleLogIn, email, setEmail,setLoading } = use(AuthContext)
+ const { signIn, setUser,  email, setEmail,setLoading } = use(AuthContext)
     const [showPass, setShowPass] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
-    const handleGoogleLogIn = () => {
-        googleLogIn()
-            .then((result) => {
-                const user = result.user
-                setUser(user)
-                
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "You have been LogIn with Google Successfully",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                navigate(`${location.state ? location.state : '/'}`)
-
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                console.log(errorCode);
-                //  const errorMessage = error.message;
-              
-            });
-    }
+   
 
     const handleLogIn = async(e) => {
         e.preventDefault()
@@ -141,16 +120,7 @@ const Login = () => {
               Welcome back!
             </h2>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleGoogleLogIn}
-              className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white/40 py-3 rounded-xl hover:bg-white/50 mb-6 backdrop-filter backdrop-blur-md transition"
-            >
-              <FcGoogle size={24} />
-              <span className="font-semibold text-black text-lg">Sign in with Google</span>
-            </motion.button>
-
+            <SocialLogin></SocialLogin>
             <div className="flex items-center my-6 text-gray-300">
               <hr className="flex-grow border-gray-500" />
               <span className="px-4 text-lg">OR LOGIN WITH EMAIL</span>

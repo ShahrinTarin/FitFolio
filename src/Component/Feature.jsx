@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaDumbbell,
   FaUsers,
@@ -6,7 +6,7 @@ import {
   FaHeartbeat,
   FaRunning,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 
 const features = [
   {
@@ -84,8 +84,14 @@ const headingVariants = {
 };
 
 const Feature = () => {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start("visible");
+  }, [controls]);
+
   return (
-    <section className="py-20 my-24 bg-white/5 border-white/10 rounded-3xl max-w-[95vw] mx-auto px-4 lg:px-8  bg-gradient-to-tr from-black/30 via-black/20 to-black/40 backdrop-blur-lg border ">
+    <section className="py-20 my-24 bg-white/5 border-white/10 rounded-3xl max-w-[95vw] mx-auto px-4 lg:px-8 bg-gradient-to-tr from-black/30 via-black/20 to-black/40 backdrop-blur-lg border ">
       <motion.h2
         className="text-4xl md:text-6xl dancing-font font-extrabold text-center text-lime-400 drop-shadow-lg mb-16 tracking-wide"
         variants={headingVariants}
@@ -99,7 +105,8 @@ const Feature = () => {
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-10"
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
+        animate={controls}
+        viewport={{ once: false }}
       >
         {features.map(({ title, description, icon: Icon }) => (
           <motion.div
@@ -107,12 +114,14 @@ const Feature = () => {
             className="bg-zinc-900 bg-opacity-80 text-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center cursor-pointer"
             variants={cardVariants}
             whileHover="hover"
+            viewport={{ once: false }}
           >
             <motion.div
               className="mb-6 text-lime-400 drop-shadow-md"
               variants={iconVariants}
               initial="initial"
               animate="animate"
+              viewport={{ once: false }}
             >
               <Icon className="w-16 h-16" />
             </motion.div>

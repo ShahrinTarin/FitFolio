@@ -55,7 +55,7 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
         >
           About FitFolio
         </motion.h2>
@@ -66,7 +66,7 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
         >
           FitFolio is a forward-thinking platform reshaping how people experience fitness. We combine advanced
           technology with expert guidance to empower individuals on their health journey—no matter where they start.
@@ -82,7 +82,7 @@ const AboutSection = () => {
               initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
             >
               {/* Icon bubble */}
               <div className="absolute -left-12 top-1.5 bg-zinc-900 p-3 rounded-full border-2 border-lime-400 shadow-lg">
@@ -91,7 +91,7 @@ const AboutSection = () => {
 
               {/* Content */}
               <div className="ml-6">
-                <h3 className="text-xl font-semibold text-lime-300 mb-3">
+                <h3 className="text-xl lobster font-semibold text-lime-300 mb-3">
                   {title}
                 </h3>
                 <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
