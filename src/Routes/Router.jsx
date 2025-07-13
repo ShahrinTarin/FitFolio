@@ -21,6 +21,9 @@ import ErrorPage from "@/Pages/ErrorPage";
 import AdminRoute from "@/Provider/AdminRoute";
 import TrainerRoute from "@/Provider/TrainerRoute";
 import Loader from "@/Shared/Loader";
+import Forum from "@/Pages/Forum";
+import AllClasses from "@/Pages/AllClasses";
+import BeTrainer from "@/Pages/BeTrainer";
 
 
 const router = createBrowserRouter([
@@ -47,6 +50,19 @@ const router = createBrowserRouter([
         path: '/alltrainers',
         Component: AllTrainers,
       },
+      {
+        path:'/betrainer',
+       element:<PrivateRoute><BeTrainer></BeTrainer></PrivateRoute>
+
+      },
+      {
+        path:'/forums',
+        Component:Forum
+      },
+      {
+        path:'classes',
+        Component:AllClasses
+      }
     ]
 
   },

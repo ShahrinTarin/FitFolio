@@ -1,9 +1,10 @@
 import React from 'react';
+import BeTrainer from './BeTrainer';
 
 const AllTrainers = () => {
   return (
     <div>
-      trainers
+      <BeTrainer></BeTrainer>
     </div>
   );
 };

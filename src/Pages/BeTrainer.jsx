@@ -1,180 +1,211 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import Select from "react-select";
-import axios from "axios";
 import Swal from "sweetalert2";
-import { AuthContext } from "../contexts/AuthProvider";
+import { useMutation } from "@tanstack/react-query";
+import { AuthContext } from "@/Provider/AuthProvider";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+
+const daysOptions = [
+  { value: "Sun", label: "Sunday" },
+  { value: "Mon", label: "Monday" },
+  { value: "Tue", label: "Tuesday" },
+  { value: "Wed", label: "Wednesday" },
+  { value: "Thu", label: "Thursday" },
+  { value: "Fri", label: "Friday" },
+  { value: "Sat", label: "Saturday" },
+];
+
+const skillsOptions = [
+  { value: "Yoga", label: "Yoga" },
+  { value: "Cardio", label: "Cardio" },
+  { value: "Strength", label: "Strength Training" },
+  { value: "Zumba", label: "Zumba" },
+  { value: "Nutrition", label: "Nutrition" },
+  { value: "Crossfit", label: "Crossfit" },
+];
 
 const BeTrainer = () => {
-  const { user } = useContext(AuthContext); // your auth context
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+
   const [formData, setFormData] = useState({
-    fullName: "",
+    fullName: user?.displayName || "",
+    email: user?.email || "",
     age: "",
-    profileImage: "",
+    profileImage: user?.photoURL || "",
     skills: [],
     availableDays: [],
     availableTime: "",
     otherInfo: "",
   });
 
-  const dayOptions = [
-    { value: "Sun", label: "Sunday" },
-    { value: "Mon", label: "Monday" },
-    { value: "Tue", label: "Tuesday" },
-    { value: "Wed", label: "Wednesday" },
-    { value: "Thu", label: "Thursday" },
-    { value: "Fri", label: "Friday" },
-    { value: "Sat", label: "Saturday" },
-  ];
-
-  const skillOptions = ["Yoga", "Fitness", "Cardio", "Nutrition", "Pilates"];
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSkillChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData((prev) => ({
-        ...prev,
-        skills: [...prev.skills, value],
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        skills: prev.skills.filter((skill) => skill !== value),
-      }));
-    }
-  };
-
   const handleDaysChange = (selected) => {
     setFormData((prev) => ({
       ...prev,
-      availableDays: selected.map((d) => d.value),
+      availableDays: selected ? selected.map((d) => d.value) : [],
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const trainerData = {
-      ...formData,
-      email: user?.email,
-      status: "pending",
-    };
+  const handleSkillsChange = (selected) => {
+    setFormData((prev) => ({
+      ...prev,
+      skills: selected ? selected.map((s) => s.value) : [],
+    }));
+  };
 
-    try {
-      const res = await axios.post("http://localhost:3000/api/trainers", trainerData, {
-        withCredentials: true,
-      });
+  const selectedDays = useMemo(
+    () => daysOptions.filter((option) => formData.availableDays.includes(option.value)),
+    [formData.availableDays]
+  );
 
-      if (res.data.success) {
-        Swal.fire("Success", "Application submitted!", "success");
-        setFormData({
-          fullName: "",
-          age: "",
-          profileImage: "",
-          skills: [],
-          availableDays: [],
-          availableTime: "",
-          otherInfo: "",
-        });
-      }
-    } catch (err) {
+  const selectedSkills = useMemo(
+    () => skillsOptions.filter((option) => formData.skills.includes(option.value)),
+    [formData.skills]
+  );
+
+  const { mutate: applyTrainer, isPending } = useMutation({
+    mutationFn: async () => {
+      const { data } = await axiosSecure.post("/trainer/apply", formData);
+      return data;
+    },
+    onSuccess: () => {
+      Swal.fire("Success!", "Your application is submitted!", "success");
+    },
+    onError: (err) => {
       console.error(err);
-      Swal.fire("Error", err.response?.data?.message || "Something went wrong!", "error");
-    }
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Something went wrong",
+        "error"
+      );
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    applyTrainer();
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Be a Trainer</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleChange}
-          placeholder="Full Name"
-          required
-          className="border p-2 w-full"
-        />
+    <section className="relative p-5 flex items-center justify-center min-h-[calc(100vh-84px)] bg-[url('https://i.ibb.co/35PwkFY3/dumble.jpg')] bg-cover bg-center">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
-        <input
-          name="email"
-          value={user?.email || ""}
-          readOnly
-          className="border p-2 w-full bg-gray-200"
-        />
+      <div className="relative w-full max-w-4xl p-10 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">Become a Trainer</h2>
 
-        <input
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          placeholder="Age"
-          type="number"
-          required
-          className="border p-2 w-full"
-        />
-
-        <input
-          name="profileImage"
-          value={formData.profileImage}
-          onChange={handleChange}
-          placeholder="Profile Image URL"
-          required
-          className="border p-2 w-full"
-        />
-
-        <div>
-          <p className="font-semibold mb-1">Skills:</p>
-          {skillOptions.map((skill) => (
-            <label key={skill} className="mr-4">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-white mb-1">Full Name</label>
               <input
-                type="checkbox"
-                value={skill}
-                checked={formData.skills.includes(skill)}
-                onChange={handleSkillChange}
-              />{" "}
-              {skill}
-            </label>
-          ))}
-        </div>
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-lime-400"
+              />
+            </div>
 
-        <div>
-          <p className="font-semibold mb-1">Available Days:</p>
-          <Select
-            isMulti
-            options={dayOptions}
-            value={dayOptions.filter((d) => formData.availableDays.includes(d.value))}
-            onChange={handleDaysChange}
-          />
-        </div>
+            <div>
+              <label className="block text-white mb-1">Email</label>
+              <input
+                type="email"
+                value={formData.email}
+                readOnly
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white opacity-70"
+              />
+            </div>
 
-        <input
-          name="availableTime"
-          value={formData.availableTime}
-          onChange={handleChange}
-          placeholder="Available Time (ex: 2pm-5pm)"
-          required
-          className="border p-2 w-full"
-        />
+            <div>
+              <label className="block text-white mb-1">Age</label>
+              <input
+                type="number"
+                name="age"
+                min={18}
+                value={formData.age}
+                onChange={handleChange}
+                required
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
 
-        <textarea
-          name="otherInfo"
-          value={formData.otherInfo}
-          onChange={handleChange}
-          placeholder="Other info"
-          className="border p-2 w-full"
-        />
+            <div>
+              <label className="block text-white mb-1">Profile Image URL</label>
+              <input
+                type="text"
+                name="profileImage"
+                value={formData.profileImage}
+                onChange={handleChange}
+                required
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Apply
-        </button>
-      </form>
-    </div>
+            <div>
+              <label className="block text-white mb-1">Available Time</label>
+              <input
+                type="text"
+                name="availableTime"
+                value={formData.availableTime}
+                onChange={handleChange}
+                placeholder="Ex: 9 AM - 12 PM"
+                required
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-white mb-1">Skills</label>
+              <Select
+                isMulti
+                options={skillsOptions}
+                onChange={handleSkillsChange}
+                value={selectedSkills}
+                className="text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Available Days</label>
+              <Select
+                isMulti
+                options={daysOptions}
+                onChange={handleDaysChange}
+                value={selectedDays}
+                className="text-black"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">Other Info</label>
+              <textarea
+                name="otherInfo"
+                value={formData.otherInfo}
+                onChange={handleChange}
+                rows={5}
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full px-6 py-3 bg-lime-400 text-black font-bold rounded hover:bg-lime-500 transition duration-300"
+            >
+              {isPending ? "Submitting..." : "Apply"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 };
 
