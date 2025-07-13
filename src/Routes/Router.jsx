@@ -15,13 +15,16 @@ import Balance from "@/DashboardPages/Balance";
 import Profile from "@/DashboardPages/Profile";
 import BookedTrainer from "@/DashboardPages/BookedTrainer";
 import AddForum from "@/DashboardPages/AddForum";
+import ManageSlots from "@/DashboardPages/ManageSlots";
+import AddSlot from "@/DashboardPages/AddSlot";
+import ErrorPage from "@/Pages/ErrorPage";
 
 
 const router = createBrowserRouter([
   {
     path: '/',
     Component: RootLayOut,
-    // errorElement: <ErrorPage></ErrorPage>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -47,6 +50,7 @@ const router = createBrowserRouter([
   
   {
     path: "/dashboard",
+    errorElement: <ErrorPage></ErrorPage>,
     element: (
       <PrivateRoute>
         <DashboardLayout />
@@ -60,9 +64,9 @@ const router = createBrowserRouter([
       { path: "balance", element: <Balance /> },
       { path: "add-class", element: <AddClass /> },
 
-      // // Trainer
-      // { path: "manage-slots", element: <ManageSlots /> },
-      // { path: "add-slot", element: <AddSlot /> },
+      // Trainer
+      { path: "manage-slots", element: <ManageSlots /> },
+      { path: "add-slot", element: <AddSlot /> },
 
       // // Shared
       { path: "add-forum", element: <AddForum/> }, // Example

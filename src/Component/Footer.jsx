@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export default function Footer() {
     return (
-        <footer className="bg-black text-[#D5FF6D] md:px-16 lg:px-32 px-8 py-10 flex flex-col md:flex-row justify-between md:items-start items-center text-center md:text-left">
+        <footer className="bg-lime-900  text-[#D5FF6D] md:px-16 lg:px-32 px-8 py-10 flex flex-col md:flex-row justify-between md:items-start items-center text-center md:text-left">
             {/* Logo & Name */}
             <div className="mb-8 md:mb-0">
                 <Link to='/'>
@@ -16,7 +16,7 @@ export default function Footer() {
                     </g>
 
 
-                    <text x="50" y="40" font-family="Poppins, Arial, sans-serif" font-weight="bold" font-size="28" fill="#C4F93F">
+                    <text x="50" y="40" fontFamily="Poppins, Arial, sans-serif" fontWeight="bold" fontSize="28" fill="#C4F93F">
                         FitFolio
                     </text>
                 </svg>

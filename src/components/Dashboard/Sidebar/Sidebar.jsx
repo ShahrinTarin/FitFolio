@@ -7,20 +7,23 @@ import Member from './Menu/Member'
 import { FaComments, FaHome } from 'react-icons/fa'
 import MenuItem from './Menu/MenuItem'
 import { Link } from 'react-router'
+import TrainerMenu from './Menu/TrainerMenu'
+import useRole from '@/hooks/useRole'
+import Loader from '@/Shared/Loader'
 
 const Sidebar = () => {
     const { logOut } = use(AuthContext)
     const [isActive, setIsActive] = useState(false)
-
+   const [role, isRoleLoading] = useRole()
     // Sidebar Responsive Handler
     const handleToggle = () => {
         setIsActive(!isActive)
     }
-
+if (isRoleLoading) return <Loader/>
     return (
         <>
             {/* Small Screen Navbar */}
-            <div className=' text-gray-500  flex justify-between md:hidden'>
+            <div className=' text-gray-500   flex justify-between md:hidden'>
                 <div>
                     <Link to='/'>
                         <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
@@ -47,7 +50,7 @@ const Sidebar = () => {
 
             {/* Sidebar */}
             <div
-                className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-white/10 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${isActive && '-translate-x-full'
+                className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gradient-to-b from-[#1a1a1a] to-[#121212] w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${isActive && '-translate-x-full'
                     }  md:translate-x-0  transition duration-200 ease-in-out`}
             >
                 <div>
@@ -72,8 +75,9 @@ const Sidebar = () => {
                         <nav>
                             <MenuItem icon={ FaHome} label='Back to Home' address='/' />
                             {/* Menu Items */}
-                            <AdminMenu />
-                            <Member></Member>
+                             {role === 'admin' && <AdminMenu />}
+                             {role === 'member' && <Member />}
+                             {role === 'trainer' && <TrainerMenu/>}
                             <MenuItem icon={FaComments} label='Add new Forum' address='/dashboard/add-forum' />
                         </nav>
                     </div>
