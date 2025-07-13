@@ -7,7 +7,7 @@ const AdminRoute = ({ children }) => {
   const [role, isRoleLoading] = useRole()
   if (isRoleLoading) return <Loader></Loader>
   if (role === 'admin') return children
-  return <Navigate to='/' replace='true' />
+  return <Navigate to='/' />
 }
 
 export default AdminRoute
