@@ -1,67 +1,73 @@
-import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import Swal from "sweetalert2";
-import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
 
-const NewsletterSubscribe = () => {
-  const axiosSecure = useAxiosSecure();
-  const [email, setEmail] = useState("");
 
-  const subscribeMutation = useMutation(
-    async (email) => {
-      const res = await axiosSecure.post("/newsletter/subscribe", { email });
-      return res.data;
+export default function NewsletterSubscribe() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+const axiosSecure =useAxiosSecure()
+  const { mutate: subscribeNewsletter, isLoading } = useMutation({
+    mutationFn: async () => {
+      const { data } = await axiosSecure.post('/newsletter/subscribe', { name, email });
+      return data;
     },
-    {
-      onSuccess: (data) => {
-        Swal.fire("Success", data.message || "Subscribed successfully!", "success");
-        setEmail("");
-      },
-      onError: (error) => {
-        Swal.fire(
-          "Error",
-          error.response?.data?.message || "Subscription failed. Try again later.",
-          "error"
-        );
-      },
-    }
-  );
+    onSuccess: () => {
+      Swal.fire('Success!', 'You have subscribed to the newsletter!', 'success');
+      setName('');
+      setEmail('');
+    },
+    onError: (err) => {
+      console.error(err);
+      Swal.fire('Error', err.response?.data?.message || 'Subscription failed. Please try again.', 'error');
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email.trim()) {
-      Swal.fire("Error", "Please enter your email address.", "error");
-      return;
-    }
-    subscribeMutation.mutate(email);
+    subscribeNewsletter();
   };
 
-  return (
-    <section className="bg-lime-500 rounded-[2rem] p-10 max-w-4xl mx-auto mt-10 text-center">
-      <h2 className="text-5xl font-extrabold mb-4">Connect Engage Transform</h2>
-      <p className="text-white mb-8">
-        Join A Vibrant Community For Fuel Motivation, Engagement Drives Progress, And Transformation
-      </p>
 
-      <form onSubmit={handleSubmit} className="flex justify-center gap-4 max-w-md mx-auto">
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="flex-grow rounded-md px-4 py-3 text-black placeholder-gray-700 focus:outline-none"
-          required
-        />
-        <button
-          type="submit"
-          disabled={subscribeMutation.isLoading}
-          className="bg-black text-white px-6 py-3 rounded-md font-semibold hover:bg-gray-800 transition"
-        >
-          {subscribeMutation.isLoading ? "Joining..." : "Join Now"}
-        </button>
-      </form>
-    </section>
-  );
-};
+ return (
+  <section className="bg-lime-500 rounded-3xl px-4 md:px-8 py-20 w-10/12 mx-auto my-16 text-center">
+    <h1 className="text-4xl md:text-6xl text-center text-gray-900 font-extrabold mb-6 dancing-font">
+      Connect Engage Transform
+    </h1>
+    <p className="mb-8 text-white opacity-90 max-w-xl mx-auto">
+      Join a vibrant community where fuel meets motivation, engagement drives progress, and transformation happens together.
+    </p>
 
-export default NewsletterSubscribe;
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full max-w-3xl mx-auto"
+    >
+      <input
+        type="text"
+        placeholder="Your Name"
+        className="bg-white rounded-full px-6 py-4 flex-1 min-w-[200px] text-black placeholder-gray-500 focus:outline-none"
+        required
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <input
+        type="email"
+        placeholder="Your Email"
+        className="bg-white rounded-full px-6 py-4 flex-1 min-w-[200px] text-black placeholder-gray-500 focus:outline-none"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="bg-black cursor-pointer text-white px-8 py-4 rounded-full hover:bg-gray-200 hover:text-black transition disabled:opacity-70 min-w-[150px]"
+      >
+        {isLoading ? 'Subscribing...' : 'Join Now'}
+      </button>
+    </form>
+  </section>
+);
+
+}
