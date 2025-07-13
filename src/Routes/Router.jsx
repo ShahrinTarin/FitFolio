@@ -18,6 +18,9 @@ import AddForum from "@/DashboardPages/AddForum";
 import ManageSlots from "@/DashboardPages/ManageSlots";
 import AddSlot from "@/DashboardPages/AddSlot";
 import ErrorPage from "@/Pages/ErrorPage";
+import AdminRoute from "@/Provider/AdminRoute";
+import TrainerRoute from "@/Provider/TrainerRoute";
+import Loader from "@/Shared/Loader";
 
 
 const router = createBrowserRouter([
@@ -28,7 +31,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        // hydrateFallbackElement: <Loader></Loader>,
+        hydrateFallbackElement: <Loader></Loader>,
         Component: Home,
 
       },
@@ -47,7 +50,7 @@ const router = createBrowserRouter([
     ]
 
   },
-  
+
   {
     path: "/dashboard",
     errorElement: <ErrorPage></ErrorPage>,
@@ -58,23 +61,23 @@ const router = createBrowserRouter([
     ),
     children: [
       // Admin
-      { path: "newsletter", element: <AllNewsletters /> },
-      { path: "trainers", element: <AllTrainer /> },
-      { path: "applied-trainers", element: <AppliedTrainers /> },
-      { path: "balance", element: <Balance /> },
-      { path: "add-class", element: <AddClass /> },
+      { path: "newsletter", element: <PrivateRoute><AdminRoute><AllNewsletters /></AdminRoute></PrivateRoute> },
+      { path: "trainers", element: <PrivateRoute><AdminRoute><AllTrainer /></AdminRoute></PrivateRoute> },
+      { path: "applied-trainers", element: <PrivateRoute><AdminRoute><AppliedTrainers /></AdminRoute></PrivateRoute> },
+      { path: "balance", element: <PrivateRoute><AdminRoute><Balance /></AdminRoute></PrivateRoute> },
+      { path: "add-class", element: <PrivateRoute><AdminRoute> <AddClass /></AdminRoute></PrivateRoute> },
 
       // Trainer
-      { path: "manage-slots", element: <ManageSlots /> },
-      { path: "add-slot", element: <AddSlot /> },
+      { path: "manage-slots", element: <PrivateRoute><TrainerRoute><ManageSlots /></TrainerRoute></PrivateRoute> },
+      { path: "add-slot", element: <PrivateRoute><TrainerRoute><AddSlot /></TrainerRoute></PrivateRoute> },
 
       // // Shared
-      { path: "add-forum", element: <AddForum/> }, // Example
+      { path: "add-forum", element: <PrivateRoute><AddForum /></PrivateRoute> }, // Example
 
       // // Member
-      { path: "activity-log", element: <ActivityLog /> },
-      { path: "profile", element: <Profile /> },
-      { path: "booked-trainer", element: <BookedTrainer /> },
+      { path: "activity-log", element: <PrivateRoute><ActivityLog /></PrivateRoute> },
+      { path: "profile", element: <PrivateRoute><Profile /></PrivateRoute> },
+      { path: "booked-trainer", element: <PrivateRoute><BookedTrainer /></PrivateRoute> },
     ],
   },
 ])

@@ -28,6 +28,7 @@ const AuthProvider = ({ children }) => {
     }
 
     const logOut = () => {
+        localStorage.removeItem('token')
         return signOut(auth)
     }
 
@@ -51,13 +52,13 @@ const AuthProvider = ({ children }) => {
                     }
                 )
                     .then(res =>
-                        localStorage.setItem('token',res.data.token)
+                        localStorage.setItem('token', res.data.token)
                     )
             }
-            else{
+            else {
                 localStorage.removeItem('token')
             }
-            
+
             setLoading(false)
         })
         return () => {
@@ -80,7 +81,7 @@ const AuthProvider = ({ children }) => {
         setEmail,
     }
     return <AuthContext value={authData}>
-         {!loading && children}
+        {!loading && children}
     </AuthContext>
 
 };

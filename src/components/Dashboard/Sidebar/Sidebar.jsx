@@ -14,12 +14,12 @@ import Loader from '@/Shared/Loader'
 const Sidebar = () => {
     const { logOut } = use(AuthContext)
     const [isActive, setIsActive] = useState(false)
-   const [role, isRoleLoading] = useRole()
+    const [role, isRoleLoading] = useRole()
     // Sidebar Responsive Handler
     const handleToggle = () => {
         setIsActive(!isActive)
     }
-if (isRoleLoading) return <Loader/>
+    if (isRoleLoading) return <Loader />
     return (
         <>
             {/* Small Screen Navbar */}
@@ -73,12 +73,16 @@ if (isRoleLoading) return <Loader/>
                     {/* Nav Items */}
                     <div className='flex flex-col justify-between flex-1 mt-6'>
                         <nav>
-                            <MenuItem icon={ FaHome} label='Back to Home' address='/' />
+                            <MenuItem icon={FaHome} label='Back to Home' address='/' />
                             {/* Menu Items */}
-                             {role === 'admin' && <AdminMenu />}
-                             {role === 'member' && <Member />}
-                             {role === 'trainer' && <TrainerMenu/>}
-                            <MenuItem icon={FaComments} label='Add new Forum' address='/dashboard/add-forum' />
+                            {role === 'admin' && <AdminMenu />}
+                            {role === 'member' && <Member />}
+                            {role === 'trainer' && <TrainerMenu />}
+                            {
+                                (role === 'admin' || role === 'trainer') && (
+                                    <MenuItem icon={FaComments} label='Add new Forum' address='/dashboard/add-forum' />
+                                )
+                            }
                         </nav>
                     </div>
                 </div>
