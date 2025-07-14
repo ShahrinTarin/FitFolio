@@ -224,7 +224,7 @@ const BeTrainer = () => {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Other Info</label>
+              <label className="block text-white mb-1">Details</label>
               <textarea
                 name="otherInfo"
                 value={formData.otherInfo}
