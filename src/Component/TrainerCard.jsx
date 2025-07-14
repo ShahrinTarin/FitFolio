@@ -20,7 +20,7 @@ const TrainerCard = ({ trainer, onKnowMore }) => {
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.05, boxShadow: '0 8px 24px rgba(132, 204, 22, 0.6)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-gradient-to-br from-lime-50 via-white to-lime-100 border border-lime-300 rounded-3xl p-6 cursor-pointer select-none"
+      className="bg-gradient-to-br from-lime-400 via-white to-black border border-lime-300 rounded-3xl p-6 cursor-pointer select-none"
       onClick={onKnowMore}
       role="button"
       tabIndex={0}

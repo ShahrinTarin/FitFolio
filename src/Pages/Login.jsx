@@ -11,7 +11,7 @@ const Login = () => {
     const [showPass, setShowPass] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
-   
+    const from = location?.state?.from?.pathname || '/'
 
     const handleLogIn = async(e) => {
         e.preventDefault()
@@ -29,7 +29,7 @@ const Login = () => {
                 showConfirmButton: false,
                 timer: 1500
             });
-            navigate(`${location.state ? location.state : '/'}`)
+              navigate(from, { replace: true })
         } catch (error) {
             console.log(error);
             Swal.fire({

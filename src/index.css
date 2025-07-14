@@ -14,7 +14,10 @@
 .lobster{
   font-family: "Lobster", sans-serif;
 }
-
+.shadow-inner-custom {
+  box-shadow: inset 4px 4px 8px rgba(255, 255, 255, 0.6),
+              inset -4px -4px 8px rgba(0, 0, 0, 0.2);
+}
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

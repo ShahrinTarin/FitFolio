@@ -20,7 +20,7 @@ const TrainerSection = () => {
   if (trainers.length === 0) return <div className="text-center text-gray-500 py-10">No approved trainers found.</div>;
 
   return (
-    <section className="md:w-11/12 w-full my-20 mx-auto">
+    <section className="md:w-11/12 w-full mt-8 mb-16 mx-auto">
       <h2 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         All Trainers
       </h2>
@@ -30,7 +30,7 @@ const TrainerSection = () => {
           <TrainerCard
             key={trainer._id}
             trainer={trainer}
-            onKnowMore={() => navigate(`/trainer-details/${trainer._id}`)}
+            onKnowMore={() => navigate(`/trainerdetails/${trainer._id}`)}
           />
         ))}
       </div>

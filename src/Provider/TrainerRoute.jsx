@@ -7,7 +7,7 @@ const TrainerRoute = ({ children }) => {
   const [role, isRoleLoading] = useRole()
   if (isRoleLoading) return <Loader></Loader>
   if (role === 'trainer') return children
-  return <Navigate to='/'  />
+  return <Navigate to='/' replace='true' />
 }
 
 export default TrainerRoute

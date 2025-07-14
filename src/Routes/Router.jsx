@@ -24,6 +24,7 @@ import Loader from "@/Shared/Loader";
 import Forum from "@/Pages/Forum";
 import AllClasses from "@/Pages/AllClasses";
 import BeTrainer from "@/Pages/BeTrainer";
+import TrainerDetails from "@/Pages/TrainerDetailsPage";
 
 
 
@@ -64,10 +65,10 @@ const router = createBrowserRouter([
         path: 'classes',
         Component: AllClasses
       },
-      // {
-      //   path: '/trainer-details/:id',
-      //   Component: TrainerDetails
-      // }
+      {
+        path: '/trainerdetails/:id',
+        Component: TrainerDetails
+      }
     ]
 
   },
@@ -82,23 +83,23 @@ const router = createBrowserRouter([
     ),
     children: [
       // Admin
-      { path: "newsletter", element: <PrivateRoute><AdminRoute><AllNewsletters /></AdminRoute></PrivateRoute> },
-      { path: "trainers", element: <PrivateRoute><AdminRoute><AllTrainer /></AdminRoute></PrivateRoute> },
-      { path: "applied-trainers", element: <PrivateRoute><AdminRoute><AppliedTrainers /></AdminRoute></PrivateRoute> },
-      { path: "balance", element: <PrivateRoute><AdminRoute><Balance /></AdminRoute></PrivateRoute> },
-      { path: "add-class", element: <PrivateRoute><AdminRoute> <AddClass /></AdminRoute></PrivateRoute> },
+      { path: "newsletter", element: <AdminRoute><AllNewsletters /></AdminRoute> },
+      { path: "trainers", element: <AdminRoute><AllTrainer /></AdminRoute> },
+      { path: "applied-trainers", element: <AdminRoute><AppliedTrainers /></AdminRoute> },
+      { path: "balance", element: <AdminRoute><Balance /></AdminRoute> },
+      { path: "add-class", element: <AdminRoute> <AddClass /></AdminRoute> },
 
       // Trainer
-      { path: "manage-slots", element: <PrivateRoute><TrainerRoute><ManageSlots /></TrainerRoute></PrivateRoute> },
-      { path: "add-slot", element: <PrivateRoute><TrainerRoute><AddSlot /></TrainerRoute></PrivateRoute> },
+      { path: "manage-slots", element: <TrainerRoute><ManageSlots /></TrainerRoute> },
+      { path: "add-slot", element: <TrainerRoute><AddSlot /></TrainerRoute> },
 
       // // Shared
-      { path: "add-forum", element: <PrivateRoute><AddForum /></PrivateRoute> }, // Example
+      { path: "add-forum", element: <AddForum />}, // Example
 
       // // Member
-      { path: "activity-log", element: <PrivateRoute><ActivityLog /></PrivateRoute> },
-      { path: "profile", element: <PrivateRoute><Profile /></PrivateRoute> },
-      { path: "booked-trainer", element: <PrivateRoute><BookedTrainer /></PrivateRoute> },
+      { path: "activity-log", element: <ActivityLog /> },
+      { path: "profile", element:<Profile />},
+      { path: "booked-trainer", element: <BookedTrainer /> },
     ],
   },
 ])

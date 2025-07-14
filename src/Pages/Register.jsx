@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../Provider/AuthProvider';
@@ -12,7 +12,6 @@ import SocialLogin from '../Shared/SocialLogin';
 const Register = () => {
   const { createUser, setUser,  updateUser } = useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
 
   // Mutation for saving user in MongoDB
@@ -90,7 +89,7 @@ const Register = () => {
         timer: 1500,
       });
 
-      navigate(location.state?.from || '/');
+     navigate('/')
     } catch (error) {
       Swal.fire('Registration Failed', error.message, 'error');
     }

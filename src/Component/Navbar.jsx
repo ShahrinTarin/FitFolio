@@ -17,6 +17,7 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     logOut()
+    localStorage.removeItem('token')
       .then(() => {
         Swal.fire({
           position: "center",
