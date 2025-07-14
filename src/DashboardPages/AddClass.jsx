@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { motion } from "framer-motion";
+import useAxiosSecure from "@/hooks/useAxiosSecure"; // your custom hook
 
 const AddClass = () => {
   const [formData, setFormData] = useState({
@@ -13,10 +13,11 @@ const AddClass = () => {
   });
 
   const queryClient = useQueryClient();
+  const axiosSecure = useAxiosSecure();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (newClass) => {
-      const res = await axios.post("https://your-api-url.com/classes", newClass);
+      const res = await axiosSecure.post("/classes", newClass);
       return res.data;
     },
     onSuccess: (data) => {
@@ -40,7 +41,7 @@ const AddClass = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newClass = { ...formData, createdAt: new Date() };
+    const newClass = { ...formData, createdAt: new Date().toISOString() };
     mutate(newClass);
   };
 
@@ -58,7 +59,7 @@ const AddClass = () => {
 
       {/* Lime accent floating curves */}
       <FloatingCurve
-        color="rgba(163, 230, 53, 0.03)" // Tailwind lime-400-ish
+        color="rgba(163, 230, 53, 0.03)"
         top="20%"
         left="15%"
         scaleDuration={30}
@@ -82,7 +83,7 @@ const AddClass = () => {
       {/* Form */}
       <div className="relative flex items-center justify-center min-h-[calc(100vh-80px)] px-4 py-8">
         <motion.div
-          className="w-full max-w-4xl p-8 bg-black/70 backdrop-blur-lg rounded-xl shadow-2xl text-white"
+          className="w-full max-w-4xl p-8 bg-transparent backdrop-blur-2xl rounded-xl shadow-2xl text-white"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
@@ -102,7 +103,7 @@ const AddClass = () => {
                 disabled={isLoading}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-lime-500 text-black font-bold rounded hover:bg-lime-600 transition duration-300"
+                className="px-6 py-3 cursor-pointer bg-lime-500 text-black font-bold rounded hover:bg-lime-600 transition duration-300"
               >
                 {isLoading ? "Adding..." : "Add Class"}
               </motion.button>
@@ -114,7 +115,6 @@ const AddClass = () => {
   );
 };
 
-// Floating Curve Component (SVG shape)
 const FloatingCurve = ({ color, top, left, scaleDuration, rotateDuration }) => (
   <motion.svg
     className="absolute blur-2xl"

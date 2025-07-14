@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
 import { AuthContext } from "@/Provider/AuthProvider";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import useRole from "@/hooks/useRole";
 
 const daysOptions = [
   { value: "Sun", label: "Sunday" },
@@ -27,7 +28,7 @@ const skillsOptions = [
 const BeTrainer = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-
+  const [role] = useRole();
   const [formData, setFormData] = useState({
     fullName: user?.displayName || "",
     email: user?.email || "",
@@ -36,6 +37,9 @@ const BeTrainer = () => {
     skills: [],
     availableDays: [],
     availableTime: "",
+    experience: "",
+    facebook: "",
+    linkedin: "",
     otherInfo: "",
   });
 
@@ -78,11 +82,7 @@ const BeTrainer = () => {
     },
     onError: (err) => {
       console.error(err);
-      Swal.fire(
-        "Error",
-        err.response?.data?.message || "Something went wrong",
-        "error"
-      );
+      Swal.fire("Error", err.response?.data?.message || "Something went wrong", "error");
     },
   });
 
@@ -99,6 +99,7 @@ const BeTrainer = () => {
         <h2 className="text-3xl font-bold mb-8 text-center text-white">Become a Trainer</h2>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Left Column */}
           <div className="space-y-4">
             <div>
               <label className="block text-white mb-1">Full Name</label>
@@ -136,6 +137,19 @@ const BeTrainer = () => {
             </div>
 
             <div>
+              <label className="block text-white mb-1">Experience (Years)</label>
+              <input
+                type="number"
+                name="experience"
+                min={0}
+                value={formData.experience}
+                onChange={handleChange}
+                required
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
+
+            <div>
               <label className="block text-white mb-1">Profile Image URL</label>
               <input
                 type="text"
@@ -161,6 +175,7 @@ const BeTrainer = () => {
             </div>
           </div>
 
+          {/* Right Column */}
           <div className="space-y-4">
             <div>
               <label className="block text-white mb-1">Skills</label>
@@ -185,20 +200,44 @@ const BeTrainer = () => {
             </div>
 
             <div>
+              <label className="block text-white mb-1">Facebook URL</label>
+              <input
+                type="text"
+                name="facebook"
+                value={formData.facebook}
+                onChange={handleChange}
+                placeholder="https://facebook.com/yourprofile"
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white mb-1">LinkedIn URL</label>
+              <input
+                type="text"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleChange}
+                placeholder="https://linkedin.com/in/yourprofile"
+                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
+              />
+            </div>
+
+            <div>
               <label className="block text-white mb-1">Other Info</label>
               <textarea
                 name="otherInfo"
                 value={formData.otherInfo}
                 onChange={handleChange}
-                rows={5}
+                rows={3}
                 className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
               />
             </div>
 
             <button
+              disabled={role !== "member" || isPending}
               type="submit"
-              disabled={isPending}
-              className="w-full px-6 py-3 bg-lime-400 text-black font-bold rounded hover:bg-lime-500 transition duration-300"
+              className="w-full cursor-pointer px-6 py-3 disabled:opacity-50 disabled:cursor-not-allowed bg-lime-400 text-black font-bold rounded hover:bg-lime-500 transition duration-300"
             >
               {isPending ? "Submitting..." : "Apply"}
             </button>

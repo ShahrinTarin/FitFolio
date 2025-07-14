@@ -15,11 +15,9 @@ const AllNewsletters = () => {
   });
 
   if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-48">
-        <Loader />
-      </div>
-    );
+    return <Loader />
+   
+    
 
   if (isError)
     return (
@@ -37,7 +35,7 @@ const AllNewsletters = () => {
     );
 
   return (
-    <div className="w-11/12 mx-auto mb-5 md:py-10  rounded-lg shadow-lg">
+    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
       <h1 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         All Newsletter Subscribers
       </h1>
@@ -46,16 +44,16 @@ const AllNewsletters = () => {
         <table className="min-w-full bg-lime-100 divide-y divide-lime-300">
           <thead className="bg-lime-200">
             <tr>
-              <th className="px-5 py-3 text-left text-md font-bold  text-lime-700 uppercase">
+              <th className="px-4 py-3 text-left text-md font-bold  text-lime-700 uppercase">
                 No
               </th>
-              <th className="px-5 py-3 text-left text-md font-bold  text-lime-700 uppercase">
+              <th className="px-2 py-3 text-left text-md font-bold  text-lime-700 uppercase">
                 Name
               </th>
-              <th className="px-5 py-3 text-left text-md font-bold  text-lime-700 uppercase">
+              <th className="px-2 py-3 text-left text-md font-bold  text-lime-700 uppercase">
                 Email
               </th>
-              <th className="px-5 py-3 text-left text-md font-bold text-lime-700 uppercase hidden md:table-cell">
+              <th className="px-2 py-3 text-left text-md font-bold text-lime-700 uppercase hidden md:table-cell">
                 Subscribed At
               </th>
             </tr>
@@ -67,12 +65,12 @@ const AllNewsletters = () => {
                 key={subscriber._id || subscriber.email || index}
                 className="hover:bg-lime-300 transition-colors"
               >
-                <td className="px-5 py-4 text-lime-700 font-medium">{index + 1}</td>
-                <td className="px-5 py-4 text-lime-800 font-semibold whitespace-nowrap">
+                <td className="px-4 py-4 text-lime-700 font-medium">{index + 1}</td>
+                <td className="px-2 py-4 text-lime-800 font-semibold whitespace-nowrap">
                   {subscriber.name || "N/A"}
                 </td>
-                <td className="px-5 py-4 text-lime-700">{subscriber.email}</td>
-                <td className="px-5 py-4 text-lime-600 hidden md:table-cell">
+                <td className="px-2 py-4 text-lime-700">{subscriber.email}</td>
+                <td className="px-2 py-4 text-lime-600 hidden md:table-cell">
                   {subscriber.subscribedAt
                     ? new Date(subscriber.subscribedAt).toLocaleDateString()
                     : "N/A"}

@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/alltrainers',
-        Component: AllTrainers,
+        element:<AllTrainers></AllTrainers>
       },
       {
         path:'/betrainer',
