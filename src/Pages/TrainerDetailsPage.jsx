@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import Loader from '@/Shared/Loader';
 
 const TrainerDetails = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const TrainerDetails = () => {
     },
   });
 
-  if (isLoading) return <div className="text-center py-20 text-xl font-medium">Loading...</div>;
+  if (isLoading) return <Loader></Loader>
   if (isError || !trainer)
     return <div className="text-center py-20 text-red-600 font-semibold">Trainer not found.</div>;
 
@@ -39,7 +40,6 @@ const TrainerDetails = () => {
       style={{ backgroundImage: "url('https://i.postimg.cc/nzgqXHkq/b3.webp')" }}
     >
       <div className="min-h-screen">
-        {/* Page Heading */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,14 +49,12 @@ const TrainerDetails = () => {
           Trainer Details
         </motion.h1>
 
-        {/* Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
           className="max-w-5xl mx-auto bg-white/90 rounded-3xl shadow-2xl border border-lime-300 p-6 md:p-8 flex flex-col md:flex-row items-center gap-10"
         >
-          {/* Image */}
           <div className="w-48 h-48 rounded-full p-1 bg-gradient-to-r from-lime-400 to-lime-600 shadow-lg flex items-center justify-center">
             <img
               src={profileImage || 'https://i.ibb.co/gFJ58yVW/user.png'}
@@ -65,14 +63,12 @@ const TrainerDetails = () => {
             />
           </div>
 
-          {/* Info */}
           <div className="flex-1 space-y-4 text-center md:text-left">
             <h2 className="text-3xl font-bold text-gray-900">{fullName}</h2>
             <p className="text-gray-700 text-sm">
               <strong>Experience:</strong> {experience} {experience === 1 ? 'year' : 'years'}
             </p>
 
-            {/* Skills */}
             <div>
               <h4 className="text-lime-600 text-sm font-bold uppercase tracking-wider">Skills</h4>
               <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
@@ -91,14 +87,12 @@ const TrainerDetails = () => {
               </div>
             </div>
 
-            {/* Other Info */}
             {otherInfo && (
               <p className="text-sm text-gray-600 italic border-l-4 border-lime-500 pl-4">
                 {otherInfo}
               </p>
             )}
 
-            {/* Social Icons */}
             <div className="flex justify-center md:justify-start gap-4 text-2xl mt-3">
               {facebook && facebook !== 'fs' && (
                 <a href={facebook} target="_blank" rel="noreferrer" className="text-blue-600 hover:text-blue-800">
@@ -114,11 +108,9 @@ const TrainerDetails = () => {
           </div>
         </motion.div>
 
-        {/* Available Slots */}
         <div className="max-w-5xl mx-auto mt-12 bg-white rounded-3xl shadow-xl border border-lime-200 p-6 md:p-8">
           <h3 className="text-2xl font-bold text-lime-700 mb-4">Available Slots</h3>
 
-          {/* ✅ Show Slot Name */}
           <p className="text-lg font-semibold text-gray-800 mb-4">
             Slot Name: <span className="text-lime-600">{slotName || 'N/A'}</span>
           </p>
@@ -128,7 +120,16 @@ const TrainerDetails = () => {
               {availableDays.map((day, idx) => (
                 <motion.button
                   key={idx}
-                  onClick={() => navigate(`/trainerbook/${id}?day=${day}`)}
+                  onClick={() =>
+                    navigate(`/trainerbook/${id}`, {
+                      state: {
+                        day,
+                        time: availableTime,
+                        trainerName: fullName,
+                        slotName
+                      }
+                    })
+                  }
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-lime-500 to-lime-600 cursor-pointer text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md transition duration-300 hover:shadow-lg hover:from-lime-600 hover:to-lime-700"
@@ -142,7 +143,6 @@ const TrainerDetails = () => {
           )}
         </div>
 
-        {/* Become a Trainer */}
         <div className="text-center mt-14 mb-10">
           <button
             onClick={() => navigate('/betrainer')}

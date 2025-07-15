@@ -1,39 +1,46 @@
-import React, { useContext } from "react";
+import React, { use, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { AuthContext } from "@/Provider/AuthProvider";
-import axios from "axios";
-
-const dayOptions = [
-  { label: "Saturday", value: "Saturday" },
-  { label: "Sunday", value: "Sunday" },
-  { label: "Monday", value: "Monday" },
-  { label: "Tuesday", value: "Tuesday" },
-  { label: "Wednesday", value: "Wednesday" },
-  { label: "Thursday", value: "Thursday" },
-  { label: "Friday", value: "Friday" },
-];
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const AddSlot = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = use(AuthContext)
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const { register, handleSubmit, setValue, watch } = useForm();
   const selectedClassId = watch("classId", "");
 
-  const { data: trainer, isLoading: trainerLoading } = useQuery({
+  // Memoize day options (optional)
+  const dayOptions = useMemo(() => [
+    { label: "Saturday", value: "Saturday" },
+    { label: "Sunday", value: "Sunday" },
+    { label: "Monday", value: "Monday" },
+    { label: "Tuesday", value: "Tuesday" },
+    { label: "Wednesday", value: "Wednesday" },
+    { label: "Thursday", value: "Thursday" },
+    { label: "Friday", value: "Friday" },
+  ], []);
+
+  // Fetch trainer info using email from backend
+  const { data: trainer, isLoading: trainerLoading, error: trainerError } = useQuery({
     queryKey: ["trainerProfile", user?.email],
     queryFn: async () => {
-      const res = await axios.get("/trainers/approved");
-      return res.data.find((t) => t.email === user.email);
+      const res = await axiosSecure.get(`/trainer/details/${user?.email}`);
+      return res.data;
     },
     enabled: !!user?.email,
   });
 
-  const { data: classes = [], isLoading: classesLoading } = useQuery({
+
+  // Fetch classes from backend
+  const {
+    data: classes = [],
+    isLoading: classesLoading,
+    error: classesError,
+  } = useQuery({
     queryKey: ["classes"],
     queryFn: async () => {
       const res = await axiosSecure.get("/classes");
@@ -41,6 +48,7 @@ const AddSlot = () => {
     },
   });
 
+  // Mutation to post new slot
   const mutation = useMutation({
     mutationFn: (slotData) => axiosSecure.post("/add-slot", slotData),
     onSuccess: () => {
@@ -73,6 +81,8 @@ const AddSlot = () => {
   };
 
   if (trainerLoading || classesLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (trainerError) return <p className="text-center text-red-600 mt-10">Failed to load trainer info.</p>;
+  if (classesError) return <p className="text-center text-red-600 mt-10">Failed to load classes.</p>;
   if (!trainer) return <p className="text-center text-red-600 mt-10">No trainer profile found.</p>;
 
   return (
@@ -83,7 +93,7 @@ const AddSlot = () => {
       <div className="bg-[#111] rounded-xl p-5 border border-[#1e1e1e] shadow-[inset_3px_3px_10px_#0a0a0a,inset_-3px_-3px_10px_#1c1c1c] mb-8">
         <h3 className="text-lg font-semibold mb-2 text-lime-300">Trainer Information</h3>
         <ul className="text-sm text-gray-400 space-y-1">
-          <li><strong className="text-gray-300">Name:</strong> {trainer.fullName}</li>
+          <li><strong className="text-gray-300">Name:</strong> {trainer?.fullName}</li>
           <li><strong className="text-gray-300">Email:</strong> {trainer.email}</li>
           <li><strong className="text-gray-300">Experience:</strong> {trainer.experience} years</li>
           <li><strong className="text-gray-300">Available Days:</strong> {trainer.availableDays?.join(", ")}</li>
@@ -116,23 +126,52 @@ const AddSlot = () => {
         {/* Select Days */}
         <div>
           <label className="block font-medium text-lime-300 mb-1">Select Days</label>
-          <div className="bg-[#121212] rounded-lg px-2 py-1 shadow-[inset_2px_2px_6px_#0a0a0a,inset_-2px_-2px_6px_#1f1f1f]">
+          <div className="bg-[#121212] rounded-lg px-2 py-1">
             <Select
               isMulti
               options={dayOptions}
               onChange={(selected) => setValue("days", selected)}
-              className="text-black"
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary25: '#2a2a2a',
-                  primary: '#84cc16',
-                  neutral0: '#121212',
-                  neutral80: '#ffffff',
-                },
-              })}
+              className="react-select-container text-white"
+              classNamePrefix="react-select"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: '#1f1f1f',
+                  borderColor: '#2c2c2c',
+                  color: '#fff',
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: '#1f1f1f',
+                  color: '#fff',
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isSelected
+                    ? '#84cc16'
+                    : state.isFocused
+                      ? '#2c2c2c'
+                      : '#1f1f1f',
+                  color: state.isSelected ? '#000' : '#fff',
+                  cursor: 'pointer',
+                }),
+                multiValue: (base) => ({
+                  ...base,
+                  backgroundColor: '#2e2e2e',
+                }),
+                multiValueLabel: (base) => ({
+                  ...base,
+                  color: '#fff',
+                }),
+                multiValueRemove: (base) => ({
+                  ...base,
+                  color: '#fff',
+                  ':hover': {
+                    backgroundColor: '#ff4d4d',
+                    color: '#fff',
+                  },
+                }),
+              }}
             />
           </div>
         </div>
@@ -145,13 +184,11 @@ const AddSlot = () => {
               <button
                 type="button"
                 key={cls._id}
-                onClick={() => setValue("classId", cls._id, { shouldValidate: true })}
-                className={`px-4 py-2 rounded-lg text-sm border shadow-md transition duration-200 
-                  ${
-                    selectedClassId === cls._id
-                      ? "bg-lime-500 text-black shadow-inner"
-                      : "bg-[#1b1b1b] text-white border-[#2a2a2a] hover:bg-[#2c2c2c]"
-                  }`}
+                onClick={() => setValue("classId", cls._id.toString(), { shouldValidate: true })}
+                className={`px-4 py-2 rounded-lg text-sm border shadow-md transition duration-200
+                  ${selectedClassId === cls._id.toString()
+                    ? "bg-lime-500 text-black shadow-inner"
+                    : "bg-[#1b1b1b] text-white border-[#2a2a2a] hover:bg-[#2c2c2c]"}`}
               >
                 {cls.name}
               </button>
@@ -170,11 +207,11 @@ const AddSlot = () => {
           />
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={mutation.isLoading}
-          className="w-full py-3 rounded-xl bg-lime-500 text-black font-semibold hover:bg-lime-400 transition duration-200 shadow-[2px_2px_6px_#0a0a0a,-2px_-2px_6px_#1f1f1f]"
+          className="w-full cursor-pointer py-3 rounded-xl bg-lime-500 text-black font-semibold hover:bg-lime-400 transition duration-200 shadow-[2px_2px_6px_#0a0a0a,-2px_-2px_6px_#1f1f1f]"
         >
           {mutation.isLoading ? "Adding Slot..." : "Add Slot"}
         </button>

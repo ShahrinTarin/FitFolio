@@ -68,7 +68,11 @@ const router = createBrowserRouter([
       {
         path: '/trainerdetails/:id',
         Component: TrainerDetails
-      }
+      },
+      // {
+      //   path:"/trainer/book/:slotId",
+      //   element:<TrainerBook />
+      // },
     ]
 
   },
