@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import useAxiosSecure from "@/hooks/useAxiosSecure"; // your custom hook
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const AddClass = () => {
   const [formData, setFormData] = useState({

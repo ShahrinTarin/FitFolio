@@ -5,7 +5,6 @@ const AllTrainers = () => {
   return (
     <div>
      <TrainerSection></TrainerSection>
-   
     </div>
   );
 };

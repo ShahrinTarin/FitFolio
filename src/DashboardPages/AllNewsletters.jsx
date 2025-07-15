@@ -35,7 +35,7 @@ const AllNewsletters = () => {
     );
 
   return (
-    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
+    <div className="mx-2 md:w-11/12 min-h-[calc(100vh-84px)] md:mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
       <h1 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         All Newsletter Subscribers
       </h1>

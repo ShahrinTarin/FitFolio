@@ -86,7 +86,7 @@ const router = createBrowserRouter([
       { path: "newsletter", element: <AdminRoute><AllNewsletters /></AdminRoute> },
       { path: "trainers", element: <AdminRoute><AllTrainer /></AdminRoute> },
       { path: "applied-trainers", element: <AdminRoute><AppliedTrainers /></AdminRoute> },
-      {index:true, path: "balance", element: <AdminRoute><Balance /></AdminRoute> },
+      { path: "balance", element: <AdminRoute><Balance /></AdminRoute> },
       { path: "add-class", element: <AdminRoute> <AddClass /></AdminRoute> },
 
       // Trainer
@@ -94,10 +94,10 @@ const router = createBrowserRouter([
       { path: "add-slot", element: <TrainerRoute><AddSlot /></TrainerRoute> },
 
       // // Shared
-      { path: "add-forum", element: <AddForum />},
+      { path: "add-forum", element: <AddForum />}, 
 
       // // Member
-      {index:true, element: <ActivityLog /> },
+      { path: "activity-log", element: <ActivityLog /> },
       { path: "profile", element:<Profile />},
       { path: "booked-trainer", element: <BookedTrainer /> },
     ],

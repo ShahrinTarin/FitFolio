@@ -27,6 +27,7 @@ const TrainerDetails = () => {
     facebook,
     linkedin,
     otherInfo,
+    slotName,
     skills = [],
     availableDays = [],
     availableTime,
@@ -37,7 +38,6 @@ const TrainerDetails = () => {
       className="min-h-[calc(100vh-84px)] py-10 px-4 bg-cover bg-center"
       style={{ backgroundImage: "url('https://i.postimg.cc/nzgqXHkq/b3.webp')" }}
     >
-      {/* Overlay */}
       <div className="min-h-screen">
         {/* Page Heading */}
         <motion.h1
@@ -56,7 +56,7 @@ const TrainerDetails = () => {
           transition={{ duration: 0.4 }}
           className="max-w-5xl mx-auto bg-white/90 rounded-3xl shadow-2xl border border-lime-300 p-6 md:p-8 flex flex-col md:flex-row items-center gap-10"
         >
-          {/* Image with gradient border */}
+          {/* Image */}
           <div className="w-48 h-48 rounded-full p-1 bg-gradient-to-r from-lime-400 to-lime-600 shadow-lg flex items-center justify-center">
             <img
               src={profileImage || 'https://i.ibb.co/gFJ58yVW/user.png'}
@@ -93,7 +93,9 @@ const TrainerDetails = () => {
 
             {/* Other Info */}
             {otherInfo && (
-              <p className="text-sm text-gray-600 italic border-l-4 border-lime-500 pl-4">{otherInfo}</p>
+              <p className="text-sm text-gray-600 italic border-l-4 border-lime-500 pl-4">
+                {otherInfo}
+              </p>
             )}
 
             {/* Social Icons */}
@@ -115,12 +117,18 @@ const TrainerDetails = () => {
         {/* Available Slots */}
         <div className="max-w-5xl mx-auto mt-12 bg-white rounded-3xl shadow-xl border border-lime-200 p-6 md:p-8">
           <h3 className="text-2xl font-bold text-lime-700 mb-4">Available Slots</h3>
+
+          {/* ✅ Show Slot Name */}
+          <p className="text-lg font-semibold text-gray-800 mb-4">
+            Slot Name: <span className="text-lime-600">{slotName || 'N/A'}</span>
+          </p>
+
           {availableDays.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {availableDays.map((day, idx) => (
                 <motion.button
                   key={idx}
-                  onClick={() => navigate(`/trainerdetails/${id}?day=${day}`)}
+                  onClick={() => navigate(`/trainerbook/${id}?day=${day}`)}
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-lime-500 to-lime-600 cursor-pointer text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md transition duration-300 hover:shadow-lg hover:from-lime-600 hover:to-lime-700"
@@ -134,7 +142,7 @@ const TrainerDetails = () => {
           )}
         </div>
 
-        {/* Become a Trainer Button */}
+        {/* Become a Trainer */}
         <div className="text-center mt-14 mb-10">
           <button
             onClick={() => navigate('/betrainer')}

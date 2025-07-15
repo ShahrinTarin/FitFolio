@@ -1,39 +1,49 @@
-import { AuthContext } from '@/Provider/AuthProvider'
-import axios from 'axios'
-import { use } from 'react'
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/Provider/AuthProvider";
+import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-})
+});
 
 const useAxiosSecure = () => {
-  const { logOut } = use(AuthContext)
-  const token = localStorage.getItem('token')
-  //   intercept requests
-  axiosInstance.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${token}`
-    return config
-  })
+  const { logOut } = useContext(AuthContext);
 
-  //   intercept responses
-  axiosInstance.interceptors.response.use(
-    res => res,
-    err => {
-      if (err.status === 401 || err.status === 403) {
-        logOut()
-          .then(() => {
-            console.log(
-              `You are logged out because of an error with ${err.status} code.`
-            )
-          })
-          .catch(err => console.log(err))
+  useEffect(() => {
+    // Request interceptor: set Authorization header before each request
+    const requestInterceptor = axiosInstance.interceptors.request.use((config) => {
+      const token = localStorage.getItem("token"); // get fresh token each request
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
-      return Promise.reject(err)
-    }
-  )
+      return config;
+    });
 
-  return axiosInstance
-}
+    // Response interceptor: handle 401/403 globally
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const status = error.response?.status;
+        if (status === 401 || status === 403) {
+          logOut()
+            .then(() => {
+              console.log(`Logged out due to HTTP status ${status}`);
+            })
+            .catch((err) => console.error(err));
+        }
+        return Promise.reject(error);
+      }
+    );
 
-export default useAxiosSecure
+    // Cleanup interceptors on unmount or re-run
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [logOut]);
+
+  return axiosInstance;
+};
+
+export default useAxiosSecure;

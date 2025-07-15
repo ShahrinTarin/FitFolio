@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
-import useAuth from '@/hooks/useAuth'; // Assuming you have a context that gives the user
+import { AuthContext } from '@/Provider/AuthProvider';
+import Loader from '@/Shared/Loader';
 
 const ManageSlots = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
-  // ✅ Fetch trainer's slots
   const { data: slots = [], isLoading, refetch } = useQuery({
     queryKey: ['trainerSlots', user?.email],
     queryFn: async () => {
@@ -18,7 +18,6 @@ const ManageSlots = () => {
     enabled: !!user?.email,
   });
 
-  // ✅ Delete handler
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
       title: 'Are you sure?',
@@ -33,57 +32,75 @@ const ManageSlots = () => {
       try {
         await axiosSecure.delete(`/slot/${id}`);
         Swal.fire('Deleted!', 'Slot has been deleted.', 'success');
-        refetch(); // Invalidate and re-fetch slots
+        refetch();
       } catch (err) {
         Swal.fire('Error!', 'Something went wrong.', 'error');
-        console.log(err);
+        console.error(err);
       }
     }
   };
 
-  // 🔄 Loading State
-  if (isLoading) return <div className="text-center py-10">Loading slots...</div>;
+  if (isLoading) return <Loader />;
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-lime-600 mb-6 text-center">Manage Your Slots</h2>
+    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
+      <h2 className="text-3xl md:text-4xl text-center text-lime-700 font-extrabold mb-6">
+        Manage Your Slots
+      </h2>
 
       {slots.length === 0 ? (
-        <p className="text-gray-500 text-center">No slots created yet.</p>
+        <p className="text-center text-gray-500 text-lg">No slots created yet.</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow">
-          <table className="min-w-full table-auto border border-gray-200">
-            <thead className="bg-lime-100 text-lime-800">
+        <div className="overflow-x-auto rounded-lg shadow-md border border-lime-300">
+          <table className="min-w-full divide-y divide-lime-300">
+            <thead className="bg-lime-200">
               <tr>
-                <th className="p-3 text-left">Day</th>
-                <th className="p-3 text-left">Time</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Booked By</th>
-                <th className="p-3 text-left">Actions</th>
+                <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
+                  Day
+                </th>
+                <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
+                  Time
+                </th>
+                <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase hidden md:table-cell">
+                  Booked By
+                </th>
+                <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-lime-300">
               {slots.map((slot) => (
-                <tr key={slot._id} className="border-b hover:bg-lime-50 transition">
-                  <td className="p-3">{slot.day}</td>
-                  <td className="p-3">{slot.time}</td>
-                  <td className="p-3">
+                <tr
+                  key={slot._id}
+                  className="hover:bg-lime-100 transition-colors cursor-default"
+                >
+                  <td className="px-4 py-4 text-lime-800 font-semibold whitespace-nowrap">
+                    {slot.day}
+                  </td>
+                  <td className="px-4 py-4 text-lime-700">{slot.time}</td>
+                  <td className="px-4 py-4">
                     {slot.isBooked ? (
-                      <span className="text-red-500 font-semibold">Booked</span>
+                      <span className="text-red-600 font-semibold">Booked</span>
                     ) : (
                       <span className="text-green-600 font-semibold">Available</span>
                     )}
                   </td>
-                  <td className="p-3">{slot.isBooked ? slot.bookedBy : '—'}</td>
-                  <td className="p-3">
+                  <td className="px-4 py-4 text-lime-700 hidden md:table-cell">
+                    {slot.isBooked ? slot.bookedBy : '—'}
+                  </td>
+                  <td className="px-4 py-4">
                     <button
                       onClick={() => handleDelete(slot._id)}
-                      className={`px-4 py-1 text-white text-sm rounded ${
+                      disabled={slot.isBooked}
+                      className={`px-4 py-2 rounded text-white text-sm font-semibold transition ${
                         slot.isBooked
                           ? 'bg-gray-400 cursor-not-allowed'
                           : 'bg-red-500 hover:bg-red-600'
                       }`}
-                      disabled={slot.isBooked}
                     >
                       Delete
                     </button>
