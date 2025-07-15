@@ -25,6 +25,7 @@ import Forum from "@/Pages/Forum";
 import AllClasses from "@/Pages/AllClasses";
 import BeTrainer from "@/Pages/BeTrainer";
 import TrainerDetails from "@/Pages/TrainerDetailsPage";
+import TrainerBooked from "@/Pages/TrainerBooked";
 
 
 
@@ -69,10 +70,10 @@ const router = createBrowserRouter([
         path: '/trainerdetails/:id',
         Component: TrainerDetails
       },
-      // {
-      //   path:"/trainer/book/:slotId",
-      //   element:<TrainerBook />
-      // },
+      {
+        path:"/trainerbook/:id",
+        element:<TrainerBooked />
+      },
     ]
 
   },
