@@ -125,7 +125,7 @@ const TrainerDetails = () => {
                       state: {
                         day,
                         time: availableTime,
-                        trainerName: fullName,
+                        trainer,
                         slotName
                       }
                     })

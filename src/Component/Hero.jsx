@@ -60,7 +60,7 @@ const Hero = () => {
       <motion.div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         animate={{ opacity: [0.3, 0.4, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Arrows */}

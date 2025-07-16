@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import TrainerCard from '@/Component/TrainerCard';
+import Loader from '@/Shared/Loader';
 
 const TrainerSection = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const TrainerSection = () => {
     },
   });
 
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (isLoading) return <Loader></Loader>;
   if (isError) return <div className="text-center text-red-500">Failed to load trainers.</div>;
   if (trainers.length === 0) return <div className="text-center text-gray-500 py-10">No approved trainers found.</div>;
 

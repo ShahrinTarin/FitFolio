@@ -26,6 +26,7 @@ import AllClasses from "@/Pages/AllClasses";
 import BeTrainer from "@/Pages/BeTrainer";
 import TrainerDetails from "@/Pages/TrainerDetailsPage";
 import TrainerBooked from "@/Pages/TrainerBooked";
+import PaymentPage from "@/Pages/PaymentPage";
 
 
 
@@ -72,7 +73,11 @@ const router = createBrowserRouter([
       },
       {
         path:"/trainerbook/:id",
-        element:<TrainerBooked />
+        element:<PrivateRoute><TrainerBooked /></PrivateRoute>
+      },
+      {
+        path:"/payment",
+        element:<PrivateRoute><PaymentPage></PaymentPage></PrivateRoute>
       },
     ]
 
