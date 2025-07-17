@@ -66,13 +66,13 @@ const Hero = () => {
       {/* Arrows */}
       <button
         onClick={goPrev}
-        className="absolute top-1/2 left-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
+        className="absolute hidden md:block top-1/2 left-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
       >
         <ChevronLeft size={24} />
       </button>
       <button
         onClick={goNext}
-        className="absolute top-1/2 right-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
+        className="absolute md:block hidden top-1/2 right-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
       >
         <ChevronRight size={24} />
       </button>

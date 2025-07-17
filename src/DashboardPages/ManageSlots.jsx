@@ -43,8 +43,8 @@ const ManageSlots = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
-      <h2 className="text-3xl md:text-4xl text-center text-lime-700 font-extrabold mb-6">
+    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto  md:py-10 rounded-lg shadow-lg">
+      <h2 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         Manage Your Slots
       </h2>
 
@@ -56,7 +56,7 @@ const ManageSlots = () => {
             <thead className="bg-lime-200">
               <tr>
                 <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
-                  Day
+                  Days
                 </th>
                 <th className="px-4 py-3 text-left text-md font-bold text-lime-700 uppercase">
                   Time
@@ -78,10 +78,16 @@ const ManageSlots = () => {
                   key={slot._id}
                   className="hover:bg-lime-100 transition-colors cursor-default"
                 >
+                  {/* Join days array if multiple days */}
                   <td className="px-4 py-4 text-lime-800 font-semibold whitespace-nowrap">
-                    {slot.day}
+                    {Array.isArray(slot.days) ? slot.days.join(', ') : slot.days || '—'}
                   </td>
-                  <td className="px-4 py-4 text-lime-700">{slot.time}</td>
+
+                  {/* Assuming your slot time is stored in slot.slotTime */}
+                  <td className="px-4 py-4 text-lime-700">
+                    {slot.slotTime || slot.time || '—'}
+                  </td>
+
                   <td className="px-4 py-4">
                     {slot.isBooked ? (
                       <span className="text-red-600 font-semibold">Booked</span>
@@ -89,9 +95,21 @@ const ManageSlots = () => {
                       <span className="text-green-600 font-semibold">Available</span>
                     )}
                   </td>
+
                   <td className="px-4 py-4 text-lime-700 hidden md:table-cell">
-                    {slot.isBooked ? slot.bookedBy : '—'}
+                    {slot.isBooked && slot.bookedBy ? (
+                      // Adjust according to your bookedBy structure
+                      <>
+                        <p className="font-semibold">{slot.bookedBy.email || slot.bookedBy.name || 'Unknown'}</p>
+                        {slot.bookedBy.transactionId && (
+                          <p className="text-xs text-gray-500">Paid At: {new Date(slot.bookedBy.paidAt).toLocaleString()}</p>
+                        )}
+                      </>
+                    ) : (
+                      '—'
+                    )}
                   </td>
+
                   <td className="px-4 py-4">
                     <button
                       onClick={() => handleDelete(slot._id)}

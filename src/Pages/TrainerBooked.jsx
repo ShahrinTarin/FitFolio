@@ -146,7 +146,6 @@ const TrainerBooked = () => {
                   <strong>Days:</strong> {slot.days.join(', ')}
                 </p>
                 <p className="text-sm text-gray-600">
-                  <strong>Class:</strong> {slot.className}
                 </p>
                 <p className="text-sm text-gray-600">{slot.otherInfo}</p>
               </div>

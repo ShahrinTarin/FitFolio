@@ -19,7 +19,7 @@ const Sidebar = () => {
     const handleToggle = () => {
         setIsActive(!isActive)
     }
-    if (isRoleLoading) return <Loader />
+    if (isRoleLoading) return <p> Loading.....</p>
     return (
         <>
             {/* Small Screen Navbar */}

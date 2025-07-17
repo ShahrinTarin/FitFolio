@@ -88,6 +88,8 @@ const PaymentPage = () => {
               slotId={selectedSlot?._id}
               day={day}
               time={time}
+              selectedClass={selectedClass}
+              selectedSlot={selectedSlot}
               packageName={selectedPackage?.name}
               classId={selectedClass?._id}
               user={userinfo}

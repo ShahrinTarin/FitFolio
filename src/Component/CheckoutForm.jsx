@@ -4,7 +4,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { use, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
-const CheckoutForm = ({ price, trainer, classId,slotId }) => {
+const CheckoutForm = ({ price, trainer, classId, slotId, selectedClass, selectedSlot }) => {
     const { user } = use(AuthContext)
     const axiosSecure = useAxiosSecure()
     const stripe = useStripe();
@@ -59,6 +59,22 @@ const CheckoutForm = ({ price, trainer, classId,slotId }) => {
             console.log('[PaymentMethod]', paymentMethod)
             setCardError(null)
         }
+
+        // 1. Check if slot is still available
+        const slotCheck = await axiosSecure.post('/check-slot-availability', {
+            slotId,
+        });
+        if (!slotCheck.data?.available) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Slot Already Booked',
+                text: 'This slot has already been taken. Please choose another one.',
+            });
+            setProcessing(false);
+            return;
+        }
+
+
         // taka pay
         const result = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
@@ -87,19 +103,41 @@ const CheckoutForm = ({ price, trainer, classId,slotId }) => {
                 price,
                 classId,
                 slotId,
+                selectedClass,
+                selectedSlot
             };
 
             try {
                 const { data } = await axiosSecure.post('/order', bookingData);
+
                 if (data?.paymentId || data?.insertedId) {
-                    Swal.fire('Success!', 'Order placed successfully!', 'success')
+                    Swal.fire('Success!', 'Order placed successfully!', 'success');
                 }
             } catch (err) {
                 console.error(err);
+
+                if (
+                    err.response?.status === 400 &&
+                    err.response?.data?.message === 'This slot has already been booked'
+                ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Slot Already Booked',
+                        text: 'Sorry, this slot has already been taken. Please choose another one.',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Payment Failed',
+                        text: err.response?.data?.message || 'Something went wrong. Please try again.',
+                    });
+                }
             } finally {
                 setProcessing(false);
                 setCardError(null);
             }
+
+
         }
 
     }
