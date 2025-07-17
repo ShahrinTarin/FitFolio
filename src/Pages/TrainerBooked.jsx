@@ -31,9 +31,12 @@ const TrainerBooked = () => {
   });
 
   const { data: slots = [], isLoading: loadingSlots } = useQuery({
-    queryKey: ['slots'],
+    queryKey: ['slots', trainer?.email],
+    enabled: !!trainer?.email,
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/slots');
+      const res = await axios.get(
+        `http://localhost:3000/slots/trainers/${trainer.email}`
+      );
       return res.data;
     },
   });
@@ -96,8 +99,7 @@ const TrainerBooked = () => {
 
   return (
     <div
-      className="min-h-[calc(100vh-84px)] py-12 px-4 bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('https://i.ibb.co/FqKDJPJn/5.jpg')" }}
+      className="min-h-[calc(100vh-84px)] py-12 px-4"
     >
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
@@ -144,21 +146,32 @@ const TrainerBooked = () => {
                 </tr>
               </thead>
               <tbody>
-                {slots.map((slot) => (
-                  <tr
-                    key={slot._id}
-                    onClick={() => setSelectedSlotId(slot._id)}
-                    className={`cursor-pointer hover:bg-gray-300 transition ${
-                      selectedSlotId === slot._id ? 'bg-lime-500 font-semibold' : ''
-                    }`}
-                  >
-                    <td className="px-4 py-3 border-b">{slot.slotName}</td>
-                    <td className="px-4 py-3 border-b">{slot.slotTime}</td>
-                    <td className="px-4 py-3 border-b">{slot.days.join(', ')}</td>
-                    <td className="px-4 py-3 border-b">{slot.otherInfo}</td>
+                {slots.length > 0 ? (
+                  slots.map((slot) => (
+                    <tr
+                      key={slot._id}
+                      onClick={() => setSelectedSlotId(slot._id)}
+                      className={`cursor-pointer hover:bg-gray-300 transition ${selectedSlotId === slot._id ? 'bg-lime-500 font-semibold' : ''
+                        }`}
+                    >
+                      <td className="px-4 py-3 border-b">{slot.slotName}</td>
+                      <td className="px-4 py-3 border-b">{slot.slotTime}</td>
+                      <td className="px-4 py-3 border-b">{slot.days.join(', ')}</td>
+                      <td className="px-4 py-3 border-b">{slot.otherInfo}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="px-4 py-6 text-center text-gray-600 italic"
+                    >
+                      No slots available for this trainer at the moment. Please check back later.
+                    </td>
                   </tr>
-                ))}
+                )}
               </tbody>
+
             </table>
           </div>
         </div>
@@ -173,11 +186,10 @@ const TrainerBooked = () => {
               <div
                 key={cls._id}
                 onClick={() => setSelectedClassId(cls._id)}
-                className={`cursor-pointer p-5 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 ${
-                  selectedClassId === cls._id
-                    ? 'border-2 border-lime-600 bg-lime-50'
-                    : 'border border-gray-200 hover:border-lime-400'
-                }`}
+                className={`cursor-pointer p-5 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 ${selectedClassId === cls._id
+                  ? 'border-2 border-lime-600 bg-lime-50'
+                  : 'border border-gray-200 hover:border-lime-400'
+                  }`}
               >
                 <img
                   src={cls.image}
@@ -201,11 +213,10 @@ const TrainerBooked = () => {
               <div
                 key={idx}
                 onClick={() => setSelectedPackage(pkg)}
-                className={`cursor-pointer rounded-2xl p-5 transition-all shadow-md hover:shadow-lg hover:scale-105 ${
-                  selectedPackage?.name === pkg.name
-                    ? 'border-2 border-lime-600 bg-lime-50'
-                    : 'border border-gray-200 hover:border-lime-400'
-                }`}
+                className={`cursor-pointer rounded-2xl p-5 transition-all shadow-md hover:shadow-lg hover:scale-105 ${selectedPackage?.name === pkg.name
+                  ? 'border-2 border-lime-600 bg-lime-50'
+                  : 'border border-gray-200 hover:border-lime-400'
+                  }`}
               >
                 <h4 className="text-lg font-bold text-gray-800">{pkg.name}</h4>
                 <p className="text-lime-600 font-semibold mt-1">

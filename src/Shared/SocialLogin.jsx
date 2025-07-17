@@ -61,7 +61,7 @@ const SocialLogin = () => {
         whileTap={{ scale: 0.98 }}
         onClick={handleGoogleLogIn}
         disabled={saveUserMutation.isLoading}
-        className={`w-full flex items-center justify-center gap-3 border border-gray-300 bg-white/40 py-3 rounded-xl hover:bg-white/50 transition ${
+        className={`w-full flex cursor-pointer items-center justify-center gap-3 border border-gray-300 bg-white/40 py-3 rounded-xl hover:bg-white/50 transition ${
           saveUserMutation.isLoading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
       >

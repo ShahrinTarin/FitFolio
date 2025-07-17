@@ -86,7 +86,9 @@ const BookedTrainer = () => {
         }
         reviewMutation.mutate({
             bookingId: currentBooking._id,
-            userEmail: user.email,
+            userEmail: user?.email,
+            userphoto: user?.photoURL || "/default-user.png",
+            userName: user?.displayName || "Anonymous",
             rating,
             feedback,
         });
@@ -118,7 +120,7 @@ const BookedTrainer = () => {
 
                         <button
                             onClick={() => openReviewModal(booking)}
-                            className="mt-4 bg-lime-400 hover:bg-lime-500 text-black font-semibold py-2 px-4 rounded-lg transition"
+                            className="mt-4 cursor-pointer bg-lime-400 hover:bg-lime-500 text-black font-semibold py-2 px-4 rounded-lg transition"
                         >
                             Leave Review
                         </button>
@@ -153,7 +155,7 @@ const BookedTrainer = () => {
                     <div className="flex justify-end gap-4">
                         <button
                             type="submit"
-                            className="bg-lime-400 hover:bg-lime-500 text-black font-bold py-2 px-5 rounded"
+                            className="bg-lime-400 cursor-pointer hover:bg-lime-500 text-black font-bold py-2 px-5 rounded"
                             disabled={reviewMutation.isPending}
                         >
                             {reviewMutation.isPending ? 'Submitting...' : 'Submit'}
@@ -161,7 +163,7 @@ const BookedTrainer = () => {
                         <button
                             type="button"
                             onClick={closeModal}
-                            className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-5 rounded"
+                            className="bg-gray-700 cursor-pointer hover:bg-gray-600 text-white font-bold py-2 px-5 rounded"
                             disabled={reviewMutation.isPending}
                         >
                             Cancel

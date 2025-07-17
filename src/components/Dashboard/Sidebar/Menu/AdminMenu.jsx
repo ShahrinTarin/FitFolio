@@ -1,10 +1,8 @@
 import { FaChalkboardTeacher, FaClipboardCheck, FaEnvelopeOpenText, FaUserTie, FaWallet } from 'react-icons/fa'
 import MenuItem from './MenuItem'
-import { BsGraphUp } from 'react-icons/bs'
 const AdminMenu = () => {
   return (
     <>
-      <MenuItem icon={BsGraphUp} label='Statistics' address='/dashboard' />
       <MenuItem icon={FaEnvelopeOpenText} label='All Newsletter' address='/dashboard/newsletter' />
       <MenuItem icon={FaUserTie } label='All Trainers' address='/dashboard/trainers' />
       <MenuItem icon={FaClipboardCheck} label='Applied Trainer' address='/dashboard/applied-trainers' />

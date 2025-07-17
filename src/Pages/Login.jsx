@@ -161,7 +161,7 @@ const Login = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 type="submit"
-                className="w-full py-4 rounded-xl bg-lime-300 text-black font-bold text-lg hover:bg-lime-400 transition"
+                className="w-full py-4 rounded-xl cursor-pointer bg-lime-300 text-black font-bold text-lg hover:bg-lime-400 transition"
               >
                 Sign In
               </motion.button>
@@ -169,7 +169,7 @@ const Login = () => {
 
             <div className="text-center text-base mt-6 text-gray-300">
               Don't have an account?{' '}
-              <Link to="/register" className="text-lime-300 hover:underline font-semibold">
+              <Link to="/register" className="text-lime-300  hover:underline font-semibold">
                 SIGN UP
               </Link>
             </div>

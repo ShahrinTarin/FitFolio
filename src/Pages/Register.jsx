@@ -224,7 +224,7 @@ const Register = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 type="submit"
-                className="w-full py-3 rounded-xl bg-lime-300 text-black font-bold text-lg hover:bg-lime-400 transition"
+                className="w-full py-3 cursor-pointer rounded-xl bg-lime-300 text-black font-bold text-lg hover:bg-lime-400 transition"
               >
                 Register
               </motion.button>

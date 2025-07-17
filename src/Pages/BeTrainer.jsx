@@ -33,7 +33,6 @@ const BeTrainer = () => {
   const [formData, setFormData] = useState({
     fullName: user?.displayName || "",
     email: user?.email || "",
-    slotName: "",          // Added slotName here
     age: "",
     profileImage: user?.photoURL || "",
     skills: [],
@@ -139,19 +138,6 @@ const BeTrainer = () => {
             </div>
 
             <div>
-              <label className="block text-white mb-1">Slot Name</label>
-              <input
-                type="text"
-                name="slotName"
-                value={formData.slotName}
-                onChange={handleChange}
-                placeholder="e.g. Morning Slot"
-                required
-                className="w-full p-3 rounded bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-lime-400"
-              />
-            </div>
-
-            <div>
               <label className="block text-white mb-1">Experience (Years)</label>
               <input
                 type="number"
@@ -244,7 +230,7 @@ const BeTrainer = () => {
                 name="otherInfo"
                 value={formData.otherInfo}
                 onChange={handleChange}
-                rows={4}
+                rows={3}
                 className="w-full p-3 rounded bg-white/20 border border-white/30 text-white"
               />
             </div>

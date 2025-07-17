@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export default function Footer() {
     return (
-        <footer className="bg-lime-900  text-[#D5FF6D] md:px-16 lg:px-32 px-8 py-10 flex flex-col md:flex-row justify-between md:items-start items-center text-center md:text-left">
+        <footer className="bg-lime-950  text-[#D5FF6D] md:px-16 lg:px-32 px-8 py-10 flex flex-col md:flex-row justify-between md:items-start items-center text-center md:text-left">
             {/* Logo & Name */}
             <div className="mb-8 md:mb-0">
                 <Link to='/'>

@@ -40,6 +40,7 @@
     "recharts": "^3.1.0",
     "stripe": "^18.3.0",
     "sweetalert2": "^11.22.2",
+    "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

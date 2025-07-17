@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Loader from '@/Shared/Loader';
+import { FaClock } from 'react-icons/fa';
 
 const TrainerDetails = () => {
   const { id } = useParams();
@@ -17,9 +18,24 @@ const TrainerDetails = () => {
     },
   });
 
-  if (isLoading) return <Loader></Loader>
+  const { data: slots = [], isLoading: loadingSlots } = useQuery({
+    queryKey: ['slots', trainer?.email],
+    enabled: !!trainer?.email,
+    queryFn: async () => {
+      const res = await axios.get(
+        `http://localhost:3000/slots/trainers/${trainer.email}`
+      );
+      return res.data;
+    },
+  });
+
+  if (isLoading || loadingSlots) return <Loader />;
   if (isError || !trainer)
-    return <div className="text-center py-20 text-red-600 font-semibold">Trainer not found.</div>;
+    return (
+      <div className="text-center py-20 text-red-600 font-semibold">
+        Trainer not found.
+      </div>
+    );
 
   const {
     fullName,
@@ -28,10 +44,7 @@ const TrainerDetails = () => {
     facebook,
     linkedin,
     otherInfo,
-    slotName,
     skills = [],
-    availableDays = [],
-    availableTime,
   } = trainer;
 
   return (
@@ -108,33 +121,33 @@ const TrainerDetails = () => {
           </div>
         </motion.div>
 
+        {/* Slots Section */}
         <div className="max-w-5xl mx-auto mt-12 bg-white rounded-3xl shadow-xl border border-lime-200 p-6 md:p-8">
           <h3 className="text-2xl font-bold text-lime-700 mb-4">Available Slots</h3>
 
-          <p className="text-lg font-semibold text-gray-800 mb-4">
-            Slot Name: <span className="text-lime-600">{slotName || 'N/A'}</span>
-          </p>
-
-          {availableDays.length > 0 ? (
+          {slots.length > 0 ? (
             <div className="flex flex-wrap gap-3">
-              {availableDays.map((day, idx) => (
+              {slots.map((slot) => (
                 <motion.button
-                  key={idx}
+                  key={slot._id}
                   onClick={() =>
                     navigate(`/trainerbook/${id}`, {
                       state: {
-                        day,
-                        time: availableTime,
                         trainer,
-                        slotName
-                      }
+                        slotName: slot.slotName,
+                        className: slot.className,
+                        slotId: slot._id,
+                        classId: slot.classId,
+                      },
                     })
                   }
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-lime-500 to-lime-600 cursor-pointer text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md transition duration-300 hover:shadow-lg hover:from-lime-600 hover:to-lime-700"
+                  className="w-52 bg-white rounded-xl p-5 cursor-pointer shadow-md flex flex-col items-center justify-center border border-gray-200 transition duration-300 hover:border-lime-500"
                 >
-                  {day} ({availableTime || 'N/A'})
+                  <FaClock className="text-lime-600 mb-2 text-2xl" />
+                  <span className="text-lg font-bold text-gray-900">{slot.slotName}</span>
+                  <span className="text-sm italic text-gray-500 mt-1">{slot.className}</span>
                 </motion.button>
               ))}
             </div>
