@@ -32,7 +32,7 @@ const BookedTrainer = () => {
     const [rating, setRating] = useState(0);
     const [feedback, setFeedback] = useState('');
 
-    const { data: bookings = [], isPending, isError, error } = useQuery({
+    const { data: bookings = [], isPending, isError } = useQuery({
         queryKey: ['bookings', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {

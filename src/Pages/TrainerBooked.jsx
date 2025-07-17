@@ -22,7 +22,6 @@ const TrainerBooked = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedSlotId, setSelectedSlotId] = useState(null);
 
-  // Fetch classes
   const { data: classes = [], isLoading: loadingClasses } = useQuery({
     queryKey: ['classes'],
     queryFn: async () => {
@@ -31,7 +30,6 @@ const TrainerBooked = () => {
     },
   });
 
-  // Fetch slots
   const { data: slots = [], isLoading: loadingSlots } = useQuery({
     queryKey: ['slots'],
     queryFn: async () => {
@@ -80,7 +78,7 @@ const TrainerBooked = () => {
         'warning'
       );
     }
-    const selectedClass = classes.find((cls) => cls._id === selectedClassId);
+    const selectedClass = classes?.find((cls) => cls._id === selectedClassId);
     const selectedSlot = slots.find((slot) => slot._id === selectedSlotId);
     navigate('/payment', {
       state: {
@@ -98,14 +96,14 @@ const TrainerBooked = () => {
 
   return (
     <div
-      className="min-h-[calc(100vh-84px)] py-12 px-4 bg-cover bg-center"
+      className="min-h-[calc(100vh-84px)] py-12 px-4 bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('https://i.ibb.co/FqKDJPJn/5.jpg')" }}
     >
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-4xl text-center text-lime-700 font-extrabold mb-10 dancing-font drop-shadow-lg"
+        className="text-4xl md:text-5xl text-center text-lime-700 font-extrabold mb-12 dancing-font drop-shadow-xl"
       >
         Trainer Booking Summary
       </motion.h1>
@@ -114,58 +112,78 @@ const TrainerBooked = () => {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="max-w-7xl mx-auto bg-white/90 rounded-3xl shadow-xl border border-lime-300 p-6 md:p-10 space-y-10"
+        className="max-w-7xl mx-auto bg-white/90 rounded-3xl shadow-2xl border border-lime-300 p-6 md:p-10 space-y-12 backdrop-blur-md"
       >
         {/* Trainer Info */}
         <div className="text-center md:text-left space-y-2">
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
             Trainer: {trainer?.fullName}
           </h2>
-          <p><strong>Trainer Email:</strong> {trainer?.email}</p>
-          <p><strong>Slot Name:</strong> {slotName}</p>
+          <p className="text-gray-600">
+            <strong>Email:</strong> {trainer?.email}
+          </p>
+          <p className="text-gray-600">
+            <strong>Slot Name:</strong> {slotName}
+          </p>
         </div>
 
         {/* Slots Selection */}
         <div>
-          <h3 className="text-xl font-bold text-lime-700 mb-4">Select a Slot</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {slots.map((slot) => (
-              <div
-                key={slot._id}
-                onClick={() => setSelectedSlotId(slot._id)}
-                className={`cursor-pointer p-4 rounded-2xl transition-all duration-200 shadow-md ${selectedSlotId === slot._id
-                    ? 'border-2 border-lime-600 bg-lime-50'
-                    : 'border border-gray-200 hover:border-lime-400'
-                  }`}
-              >
-                <h4 className="text-lg font-semibold text-gray-800">{slot.slotName}</h4>
-                <p className="text-sm text-gray-600">
-                  <strong>Time:</strong> {slot.slotTime}
-                </p>
-                <p className="text-sm text-gray-600">
-                  <strong>Days:</strong> {slot.days.join(', ')}
-                </p>
-                <p className="text-sm text-gray-600">
-                </p>
-                <p className="text-sm text-gray-600">{slot.otherInfo}</p>
-              </div>
-            ))}
+          <h3 className="text-xl md:text-2xl font-bold text-lime-700 mb-4">
+            Select a Slot
+          </h3>
+
+          <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <table className="min-w-full text-left text-gray-800">
+              <thead className="bg-lime-800 text-gray-200 uppercase text-sm">
+                <tr>
+                  <th className="px-4 py-3 border-b">Slot Name</th>
+                  <th className="px-4 py-3 border-b">Time</th>
+                  <th className="px-4 py-3 border-b">Days</th>
+                  <th className="px-4 py-3 border-b">Other Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {slots.map((slot) => (
+                  <tr
+                    key={slot._id}
+                    onClick={() => setSelectedSlotId(slot._id)}
+                    className={`cursor-pointer hover:bg-gray-300 transition ${
+                      selectedSlotId === slot._id ? 'bg-lime-500 font-semibold' : ''
+                    }`}
+                  >
+                    <td className="px-4 py-3 border-b">{slot.slotName}</td>
+                    <td className="px-4 py-3 border-b">{slot.slotTime}</td>
+                    <td className="px-4 py-3 border-b">{slot.days.join(', ')}</td>
+                    <td className="px-4 py-3 border-b">{slot.otherInfo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
         {/* Class Selection */}
         <div>
-          <h3 className="text-xl font-bold text-lime-700 mb-4">Select a Class</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h3 className="text-xl md:text-2xl font-bold text-lime-700 mb-4">
+            Select a Class
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {classes.map((cls) => (
               <div
                 key={cls._id}
                 onClick={() => setSelectedClassId(cls._id)}
-                className={`cursor-pointer p-4 rounded-2xl transition-all duration-200 shadow-md ${selectedClassId === cls._id
+                className={`cursor-pointer p-5 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 ${
+                  selectedClassId === cls._id
                     ? 'border-2 border-lime-600 bg-lime-50'
                     : 'border border-gray-200 hover:border-lime-400'
-                  }`}
+                }`}
               >
+                <img
+                  src={cls.image}
+                  alt={cls.name}
+                  className="w-full h-40 object-cover rounded-lg mb-3"
+                />
                 <h4 className="text-lg font-semibold text-gray-800">{cls.name}</h4>
                 <p className="text-sm text-gray-600">{cls.details}</p>
               </div>
@@ -175,20 +193,25 @@ const TrainerBooked = () => {
 
         {/* Package Selection */}
         <div>
-          <h3 className="text-xl font-bold text-lime-700 mb-4">Choose a Membership Package</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-lime-700 mb-4">
+            Choose a Membership Package
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {packages.map((pkg, idx) => (
               <div
                 key={idx}
                 onClick={() => setSelectedPackage(pkg)}
-                className={`cursor-pointer rounded-2xl p-5 transition-all shadow-2xl ${selectedPackage?.name === pkg.name
+                className={`cursor-pointer rounded-2xl p-5 transition-all shadow-md hover:shadow-lg hover:scale-105 ${
+                  selectedPackage?.name === pkg.name
                     ? 'border-2 border-lime-600 bg-lime-50'
                     : 'border border-gray-200 hover:border-lime-400'
-                  }`}
+                }`}
               >
                 <h4 className="text-lg font-bold text-gray-800">{pkg.name}</h4>
-                <p className="text-lime-600 font-semibold mt-1">Price: ${pkg.price}</p>
-                <ul className="list-disc mt-2 ml-4 text-sm text-gray-700">
+                <p className="text-lime-600 font-semibold mt-1">
+                  Price: ${pkg.price}
+                </p>
+                <ul className="list-disc mt-2 ml-4 text-sm text-gray-700 space-y-1">
                   {pkg.benefits.map((b, i) => (
                     <li key={i}>{b}</li>
                   ))}
@@ -202,7 +225,7 @@ const TrainerBooked = () => {
         <div className="text-center">
           <button
             onClick={handleJoinNow}
-            className="bg-gradient-to-r from-gray-900 to-lime-600 text-white font-bold text-lg px-10 py-3 rounded-full shadow-lg hover:shadow-xl transition duration-300 hover:scale-105"
+            className="bg-gradient-to-r from-lime-600 to-green-700 text-white font-bold text-lg px-12 py-4 rounded-full shadow-xl hover:shadow-2xl transition transform hover:scale-105"
           >
             Join Now
           </button>

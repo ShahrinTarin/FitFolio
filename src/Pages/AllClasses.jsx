@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
-import { Link } from 'react-router';
 import Loader from '@/Shared/Loader';
+import { FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router';
 
 const LIMIT = 6;
 
 const AllClasses = () => {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const axiosSecure = useAxiosSecure();
 
   const { data: classData = {}, isLoading } = useQuery({
-    queryKey: ['all-classes', page],
+    queryKey: ['all-classes', page, search],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/class?page=${page}&limit=${LIMIT}`);
+      const res = await axiosSecure.get(
+        `/class?page=${page}&limit=${LIMIT}&search=${encodeURIComponent(search)}`
+      );
       return res.data;
     },
+    keepPreviousData: true,
   });
 
   const { classes = [], total = 0 } = classData;
@@ -25,36 +30,55 @@ const AllClasses = () => {
     <div className="min-h-screen bg-black text-lime-400 p-6">
       <h2 className="text-3xl font-bold text-center mb-6">All Classes</h2>
 
+      {/* Search Bar */}
+    <div className="flex justify-center mb-6">
+  <div className="relative w-full max-w-lg">
+    <input
+      type="search"
+      placeholder="Search classes by name..."
+      value={search}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        setPage(1); // Reset page on new search
+      }}
+      className="w-full pl-12 pr-4 py-3 rounded-full bg-gray-800 text-white placeholder-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      spellCheck={false}
+      autoComplete="off"
+    />
+    <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lime-400 text-xl" />
+  </div>
+</div>
+
       {isLoading ? (
-        <Loader></Loader>
+        <Loader />
       ) : classes.length === 0 ? (
-        <p className="text-center text-white">No classes available.</p>
+        <p className="text-center text-white text-lg mt-10">No classes found.</p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {classes.map((cls) => (
             <ClassCard key={cls._id} cls={cls} />
           ))}
         </div>
       )}
 
-      {/* Pagination with Arrows */}
-      <div className="flex justify-center items-center mt-8 gap-2 flex-wrap">
+      {/* Pagination */}
+      <div className="flex justify-center items-center mt-10 gap-3 flex-wrap">
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className="px-3 py-1 rounded bg-gray-800 text-white disabled:opacity-50"
+          className="px-4 py-2 rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
         >
-          ⬅ Prev
+          ← Prev
         </button>
 
         {[...Array(totalPages).keys()].map((n) => (
           <button
             key={n}
             onClick={() => setPage(n + 1)}
-            className={`px-3 py-1 rounded transition ${
+            className={`px-4 py-2 rounded-full font-semibold transition ${
               page === n + 1
-                ? 'bg-lime-400 text-black font-semibold'
-                : 'bg-gray-800 text-white'
+                ? 'bg-lime-400 text-black'
+                : 'bg-gray-800 text-white hover:bg-lime-600'
             }`}
           >
             {n + 1}
@@ -64,9 +88,9 @@ const AllClasses = () => {
         <button
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
-          className="px-3 py-1 rounded bg-gray-800 text-white disabled:opacity-50"
+          className="px-4 py-2 rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
         >
-          Next ➡
+          Next →
         </button>
       </div>
     </div>
