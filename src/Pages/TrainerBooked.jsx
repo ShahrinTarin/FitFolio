@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import Loader from '@/Shared/Loader';
 import { motion } from 'framer-motion';
 import Swal from 'sweetalert2';
 import { AuthContext } from '@/Provider/AuthProvider';
+import { Helmet } from 'react-helmet-async';
 
 const TrainerBooked = () => {
   const { user } = use(AuthContext);
@@ -21,6 +22,14 @@ const TrainerBooked = () => {
   const [selectedClassId, setSelectedClassId] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedSlotId, setSelectedSlotId] = useState(null);
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | TrainerBooked';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: classes = [], isLoading: loadingClasses } = useQuery({
     queryKey: ['classes'],
@@ -101,6 +110,9 @@ const TrainerBooked = () => {
     <div
       className="min-h-[calc(100vh-84px)] py-12 px-4"
     >
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

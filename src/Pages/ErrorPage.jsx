@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 const ErrorPage = () => {
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'ErrorPage';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black px-6 py-12">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: .8, rotate: [0, 10, -10, 0] }}

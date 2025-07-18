@@ -1,16 +1,25 @@
-import React, { use,  useState } from 'react';
+import React, { use,  useEffect,  useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../Provider/AuthProvider';
 import { motion } from 'framer-motion';
 import SocialLogin from '../Shared/SocialLogin';
+import { Helmet } from 'react-helmet-async';
 
 const Login = () => {
  const { signIn, setUser,  email, setEmail,setLoading } = use(AuthContext)
     const [showPass, setShowPass] = useState(false)
     const location = useLocation()
     const navigate = useNavigate()
+      const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | Login';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
     const from = location?.state?.from?.pathname || '/'
 
     const handleLogIn = async(e) => {
@@ -45,6 +54,9 @@ const Login = () => {
     }
   return (
     <div className="relative min-h-[calc(100vh-84px)] flex items-center justify-center bg-black overflow-hidden">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       {/* ---- Animated Waves ---- */}
       <motion.svg
         className="absolute bottom-0 left-0 w-full h-full z-0"

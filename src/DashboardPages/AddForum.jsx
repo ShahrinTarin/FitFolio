@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Helmet } from 'react-helmet-async';
 
 const categories = [
   'Nutrition',
@@ -15,6 +16,14 @@ const categories = [
 const AddForum = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AddForum';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -72,6 +81,9 @@ const AddForum = () => {
 
   return (
     <div className="min-h-screen py-5 flex items-center justify-center bg-black px-4">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <div className="max-w-4xl w-full p-10 bg-gradient-to-br from-[#121212] to-[#0a0a0a] rounded-3xl shadow-lg text-white">
         <h2 className="text-4xl font-extrabold mb-8 text-lime-400 text-center">
           Add New Forum Post

@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useMemo, useContext, useEffect } from "react";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
 import { AuthContext } from "@/Provider/AuthProvider";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useRole from "@/hooks/useRole";
+import { Helmet } from "react-helmet-async";
 
 const daysOptions = [
   { value: "Sun", label: "Sunday" },
@@ -29,6 +30,14 @@ const BeTrainer = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [role] = useRole();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | BeTrainer';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const [formData, setFormData] = useState({
     fullName: user?.displayName || "",
@@ -94,6 +103,9 @@ const BeTrainer = () => {
 
   return (
     <section className="relative p-5 flex items-center justify-center min-h-[calc(100vh-84px)] bg-[url('https://i.ibb.co/35PwkFY3/dumble.jpg')] bg-cover bg-center">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
       <div className="relative w-full max-w-4xl p-10 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">

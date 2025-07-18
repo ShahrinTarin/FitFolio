@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import Loader from '@/Shared/Loader';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 const LIMIT = 6;
 
@@ -12,6 +13,14 @@ const AllClasses = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const axiosSecure = useAxiosSecure();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AllClasses';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: classData = {}, isLoading } = useQuery({
     queryKey: ['all-classes', page, search],
@@ -29,6 +38,9 @@ const AllClasses = () => {
 
   return (
     <div className="min-h-screen bg-black text-lime-400 p-6">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

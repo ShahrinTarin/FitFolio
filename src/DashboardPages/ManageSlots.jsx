@@ -1,13 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { AuthContext } from '@/Provider/AuthProvider';
 import Loader from '@/Shared/Loader';
+import { Helmet } from 'react-helmet-async';
 
 const ManageSlots = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
+  const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | ManageSlot';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: slots = [], isLoading, refetch } = useQuery({
     queryKey: ['trainerSlots', user?.email],
@@ -43,8 +52,12 @@ const ManageSlots = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto  md:py-10 rounded-lg shadow-lg">
-      <h2 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
+    <div>
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto  md:py-10 rounded-lg shadow-lg">
+      <h2 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-8 dancing-font drop-shadow-lg">
         Manage Your Slots
       </h2>
 
@@ -114,11 +127,10 @@ const ManageSlots = () => {
                     <button
                       onClick={() => handleDelete(slot._id)}
                       disabled={slot.isBooked}
-                      className={`px-4 py-2 rounded text-white text-sm font-semibold transition ${
-                        slot.isBooked
+                      className={`px-4 py-2 rounded text-white text-sm font-semibold transition ${slot.isBooked
                           ? 'bg-gray-400 cursor-not-allowed'
                           : 'bg-red-500 hover:bg-red-600'
-                      }`}
+                        }`}
                     >
                       Delete
                     </button>
@@ -129,6 +141,7 @@ const ManageSlots = () => {
           </table>
         </div>
       )}
+    </div>
     </div>
   );
 };

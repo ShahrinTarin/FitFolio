@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { FaUserCircle, FaDollarSign } from 'react-icons/fa';
+import { Helmet } from 'react-helmet-async';
 
-const COLORS = ['#84cc16', '#facc15']; // lime and yellow
+const COLORS = ['#84cc16', '#facc15']; 
 
 const Balance = () => {
   const axiosSecure = useAxiosSecure();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | Balance';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: summary = {}, error: summaryError } = useQuery({
     queryKey: ['admin-balance'],
@@ -40,6 +49,9 @@ const Balance = () => {
 
   return (
     <div className="p-8 max-w-11/12 mx-auto text-white space-y-12">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h2 className="text-4xl font-extrabold text-lime-400 text-center mb-8">
         💰 Admin Balance Overview
       </h2>

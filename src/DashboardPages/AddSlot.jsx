@@ -1,15 +1,24 @@
-import React, { use, useMemo } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { AuthContext } from "@/Provider/AuthProvider";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const AddSlot = () => {
   const { user } = use(AuthContext)
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AddSlot';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
   const { register, handleSubmit, setValue, watch } = useForm();
   const selectedClassId = watch("classId", "");
 
@@ -87,6 +96,9 @@ const AddSlot = () => {
 
   return (
     <div className="max-w-3xl mb-8 mx-auto p-8 bg-[#0f0f0f] text-gray-200 rounded-2xl shadow-[inset_5px_5px_15px_#0a0a0a,inset_-5px_-5px_15px_#1a1a1a] mt-12">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h2 className="text-3xl font-bold text-center text-lime-400 mb-8">Add New Slot</h2>
 
       {/* Trainer Info */}

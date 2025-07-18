@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { updateProfile } from 'firebase/auth'
 import Loader from '@/Shared/Loader'
 import { AuthContext } from '@/Provider/AuthProvider'
 import useRole from '@/hooks/useRole'
+import { Helmet } from 'react-helmet-async'
 
 const Profile = () => {
   const { user } = useContext(AuthContext)
@@ -12,6 +13,14 @@ const Profile = () => {
   const [photoURL, setPhotoURL] = useState(user?.photoURL || '')
   const [isUpdating, setIsUpdating] = useState(false)
   const [error, setError] = useState(null)
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | Profile';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   if (isRoleLoading || !user) return <Loader />
 
@@ -36,6 +45,9 @@ const Profile = () => {
 
   return (
     <div className="flex justify-center items-center p-4 min-h-screen bg-black px-4">
+      <Helmet>
+                <title>{pageTitle}</title>
+            </Helmet>
       <div className="bg-white/20 backdrop-blur-md border border-whitez shadow-inner-custom rounded-2xl w-full max-w-3xl p-4">
         {/* Cover Image */}
         <img

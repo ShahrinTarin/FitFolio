@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Loader from "@/Shared/Loader";
+import { Helmet } from "react-helmet-async";
 
 const AllNewsletters = () => {
   const axiosSecure = useAxiosSecure();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AllNewsletters';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: subscribers = [], isLoading, isError } = useQuery({
     queryKey: ["newsletterSubscribers"],
@@ -36,6 +45,9 @@ const AllNewsletters = () => {
 
   return (
     <div className="mx-2 md:w-11/12 min-h-[calc(100vh-84px)] md:mx-auto mb-5 mt-8 md:py-10 rounded-lg shadow-lg">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h1 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         All Newsletter Subscribers
       </h1>

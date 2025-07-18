@@ -3,12 +3,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Loader from '@/Shared/Loader';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { Helmet } from 'react-helmet-async';
 
 const Forum = () => {
   const [page, setPage] = useState(1);
   const axiosSecure = useAxiosSecure();
   const [userEmail, setUserEmail] = useState(null);
   const queryClient = useQueryClient();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | Forum';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -69,6 +78,9 @@ const Forum = () => {
 
   return (
     <div className="min-h-screen max-w-6xl mx-auto px-4 py-10 text-white">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h1 className="text-3xl lg:text-5xl dancing-font font-bold text-center text-lime-400 mb-8">
         📚 Forum Posts
       </h1>

@@ -1,14 +1,23 @@
 import CheckoutForm from '@/Component/CheckoutForm';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const PaymentPage = () => {
   const { state } = useLocation();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | PaymentPage';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
   const {
     trainer,
     slotName,
@@ -24,6 +33,9 @@ const PaymentPage = () => {
       className="min-h-[calc(100vh-84px)] py-12 px-4 bg-cover bg-center"
       style={{ backgroundImage: "url('https://i.ibb.co/DfgcLgqD/4.jpg')" }}
     >
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

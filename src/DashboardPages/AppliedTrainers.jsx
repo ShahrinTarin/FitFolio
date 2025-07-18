@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Loader from "@/Shared/Loader";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const AppliedTrainers = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AppliedTrainers';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const [selectedApp, setSelectedApp] = useState(null);
   const [feedback, setFeedback] = useState("");
@@ -127,6 +136,9 @@ const AppliedTrainers = () => {
 
   return (
     <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto mb-5  md:py-10 rounded-lg shadow-lg">
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h1 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-6 dancing-font drop-shadow-lg">
         Applied Trainer Requests
       </h1>

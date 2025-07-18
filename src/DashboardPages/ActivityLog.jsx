@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaEye } from "react-icons/fa";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Loader from "@/Shared/Loader";
 import FeedbackModal from "./FeedbackModal";
+import { Helmet } from "react-helmet-async";
 
 const ActivityLog = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedFeedback, setSelectedFeedback] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | ActivityLog';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: applicants = [], isLoading } = useQuery({
     queryKey: ["activity-log"],
@@ -32,6 +41,9 @@ const ActivityLog = () => {
 
   return (
     <div className="w-11/12 min-h-[calc(100vh-84px)] mx-auto my-10 md:py-10 rounded-lg shadow-lg ">
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <h1 className="text-3xl md:text-4xl text-center text-lime-400 font-extrabold mb-8 dancing-font drop-shadow-lg">
         📋 Activity Log
       </h1>
@@ -76,11 +88,10 @@ const ActivityLog = () => {
                   <td className="px-6 py-4 text-lime-700">{applicant.email}</td>
                   <td className="px-6 py-4 text-lime-800 font-semibold">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        applicant.status === "rejected"
+                      className={`px-3 py-1 rounded-full text-xs font-bold ${applicant.status === "rejected"
                           ? "bg-red-100 text-red-600"
                           : "bg-yellow-100 text-yellow-600"
-                      }`}
+                        }`}
                     >
                       {applicant.status}
                     </span>

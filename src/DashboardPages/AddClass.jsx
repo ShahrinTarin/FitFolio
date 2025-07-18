@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const AddClass = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,14 @@ const AddClass = () => {
 
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | AddClass';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (newClass) => {
@@ -47,6 +56,9 @@ const AddClass = () => {
 
   return (
     <section className="relative min-h-screen bg-black flex items-center justify-center px-4 py-12 overflow-hidden">
+ <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       {/* Floating neon curves */}
       <FloatingCurve
         color="rgba(163, 230, 53, 0.08)"

@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Loader from '@/Shared/Loader';
 import { FaClock } from 'react-icons/fa';
+import { Helmet } from 'react-helmet-async';
 
 const TrainerDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+useEffect(() => {
+    const newTitle = 'FitFolio | TrainerDetails';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: trainer, isLoading, isError } = useQuery({
     queryKey: ['trainer', id],
@@ -52,6 +61,9 @@ const TrainerDetails = () => {
       className="min-h-[calc(100vh-84px)] py-10 px-4 bg-cover bg-center"
       style={{ backgroundImage: "url('https://i.postimg.cc/nzgqXHkq/b3.webp')" }}
     >
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <div className="min-h-screen">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}

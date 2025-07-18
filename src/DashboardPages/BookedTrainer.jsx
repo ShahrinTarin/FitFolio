@@ -1,10 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthContext } from '@/Provider/AuthProvider';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import Modal from 'react-modal';
 import Swal from 'sweetalert2';
 import Loader from '@/Shared/Loader';
+import { Helmet } from 'react-helmet-async';
 
 const StarRating = ({ rating, setRating }) => {
     return (
@@ -26,6 +27,14 @@ const BookedTrainer = () => {
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const queryClient = useQueryClient();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+    useEffect(() => {
+        const newTitle = 'FitFolio | BookedTrainer';
+        setPageTitle(newTitle);
+        document.title = newTitle;
+
+    }, [])
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentBooking, setCurrentBooking] = useState(null);
@@ -95,11 +104,16 @@ const BookedTrainer = () => {
     };
 
     if (isPending) return <Loader></Loader>;
-    if (isError) return <Loader></Loader>;
+    if (isError) return <div className="p-6 text-red-500 text-center font-semibold">
+        ⚠️ Error loading data
+    </div>
     if (bookings.length === 0) return <p className="text-center mt-20 text-gray-300">You haven’t booked any classes yet.</p>;
 
     return (
         <div className="p-6 space-y-6">
+            <Helmet>
+                <title>{pageTitle}</title>
+            </Helmet>
             <h2 className="text-3xl font-bold text-center text-lime-400 dancing-font">Your Booked Trainers</h2>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

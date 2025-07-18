@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
@@ -8,11 +8,20 @@ import { motion } from 'framer-motion';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import SocialLogin from '../Shared/SocialLogin';
+import { Helmet } from 'react-helmet-async';
 
 const Register = () => {
   const { createUser, setUser,  updateUser } = useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
+    const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | Register';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   // Mutation for saving user in MongoDB
   const registerMutation = useMutation({
@@ -98,6 +107,9 @@ const Register = () => {
   return (
     <div className="relative min-h-[calc(100vh-84px)] flex items-center justify-center bg-black overflow-hidden">
       {/* Waves */}
+       <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       <motion.svg
         className="absolute bottom-0 left-0 w-full h-full z-0"
         xmlns="http://www.w3.org/2000/svg"
