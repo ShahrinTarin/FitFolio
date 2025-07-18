@@ -7,6 +7,7 @@ import FeaturedClass from '@/Component/FeaturedClass';
 import ReviewCarousel from '@/Component/ReviewCarousel';
 import TeamSection from '@/Component/TeamSection';
 import LatestForumPosts from '@/Component/LatestForumPosts';
+import Marquee from '@/Component/Marquee';
 const Home = () => {
     return (
         <div>
@@ -16,8 +17,9 @@ const Home = () => {
             <FeaturedClass></FeaturedClass>
             <ReviewCarousel></ReviewCarousel>
             <LatestForumPosts></LatestForumPosts>
-            <NewsletterSubscribe></NewsletterSubscribe>
             <TeamSection></TeamSection>
+            <Marquee></Marquee>
+            <NewsletterSubscribe></NewsletterSubscribe>
         </div>
     );
 };

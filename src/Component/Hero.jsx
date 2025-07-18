@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router";
 
 const bgImages = [
   "https://i.ibb.co/zWqkQDpy/john.png",
@@ -103,8 +104,8 @@ const Hero = () => {
           We help you stay motivated, healthy, and inspired every day.
         </motion.p>
 
-        <motion.button
-          className="bg-lime-400 text-black font-semibold py-3 px-8 rounded-full hover:bg-lime-500 transition shadow-md"
+        <Link to='/classes' ><motion.button
+          className="bg-lime-400 text-black cursor-pointer font-semibold py-3 px-8 rounded-full hover:bg-lime-500 transition shadow-md"
           variants={buttonVariants}
           initial="hidden"
           animate={controls}
@@ -112,7 +113,7 @@ const Hero = () => {
           whileTap={{ scale: 0.95 }}
         >
           Let&apos;s Start &gt;&gt;&gt;
-        </motion.button>
+        </motion.button></Link>
       </div>
 
       {/* Dot Indicators */}
