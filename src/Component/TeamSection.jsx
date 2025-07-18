@@ -53,7 +53,7 @@ const TeamSection = () => {
     if (isLoading) return <Loader></Loader>
 
     return (
-        <section className="max-w-7xl mx-auto mt-8 px-4 pb-24">
+        <section className="max-w-7xl mx-auto mt-5 px-4 pb-24">
             {/* Heading */}
             <motion.div
                 className="text-center mb-20"
