@@ -53,7 +53,7 @@ const ActivityLog = () => {
           No pending or rejected applications.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow-md border border-lime-300 bg-white">
+        <div className="overflow-x-auto rounded-lg shadow-md border border-lime-300 bg-lime-50">
           <table className="min-w-full divide-y divide-lime-300">
             <thead className="bg-lime-200">
               <tr>
