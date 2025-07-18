@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import { FaFacebookF, FaLinkedinIn } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import Loader from '@/Shared/Loader';
 
 const containerVariants = {
     hidden: {},
@@ -49,7 +50,7 @@ const TeamSection = () => {
         },
     });
 
-    if (isLoading) return <p className="text-center py-10 text-white">Loading...</p>;
+    if (isLoading) return <Loader></Loader>
 
     return (
         <section className="max-w-7xl mx-auto px-4 pb-24">

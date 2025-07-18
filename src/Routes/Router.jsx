@@ -28,6 +28,7 @@ import TrainerDetails from "@/Pages/TrainerDetailsPage";
 import TrainerBooked from "@/Pages/TrainerBooked";
 import PaymentPage from "@/Pages/PaymentPage";
 import AdminTrainerRoute from "@/Provider/AdminTrainerRoute";
+import ForumDetails from "@/Pages/ForumDetails";
 
 
 
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
         path:"/payment",
         element:<PrivateRoute><PaymentPage></PaymentPage></PrivateRoute>
       },
+      {
+        path:"/forums/:id",
+        element:<PrivateRoute><ForumDetails></ForumDetails></PrivateRoute>
+      },
+
     ]
 
   },
