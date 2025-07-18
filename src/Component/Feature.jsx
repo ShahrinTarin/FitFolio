@@ -36,50 +36,51 @@ const features = [
   },
 ];
 
-// Container variant to stagger children
 const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.25, // delay between children animation
+      staggerChildren: 0.2,
     },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring", bounce: 0.25, duration: 0.7 },
+    transition: {
+      type: "spring",
+      stiffness: 80,
+      damping: 15,
+      duration: 0.6,
+    },
   },
   hover: {
     scale: 1.05,
-    boxShadow:
-      "0 12px 24px rgba(40, 230, 120, 0.3), 0 8px 16px rgba(40, 230, 120, 0.15)",
-    transition: { duration: 0.3, ease: "easeOut" },
+    boxShadow: "0 10px 25px rgba(132, 204, 22, 0.25)",
+    transition: { duration: 0.3 },
   },
 };
 
-const iconVariants = {
-  initial: { scale: 1 },
-  animate: {
-    scale: [1, 1.2, 1],
+const iconHoverVariants = {
+  hover: {
+    rotate: [0, 10, -10, 10, -10, 0],
     transition: {
-      repeat: Infinity,
-      duration: 3,
+      duration: 0.8,
       ease: "easeInOut",
     },
   },
 };
 
 const headingVariants = {
-  initial: { opacity: 0, y: -20 },
+  initial: { opacity: 0, y: -30 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1, ease: "easeOut" },
+    transition: { duration: 1 },
   },
 };
 
@@ -91,7 +92,7 @@ const Feature = () => {
   }, [controls]);
 
   return (
-    <section className="py-20 my-24 bg-white/5 border-white/10 rounded-3xl max-w-[95vw] mx-auto px-4 lg:px-8 bg-gradient-to-tr from-black/30 via-black/20 to-black/40 backdrop-blur-lg border ">
+    <section className="py-20 my-24 bg-white/5 border-white/10 rounded-3xl max-w-[95vw] mx-auto px-4 lg:px-8 bg-gradient-to-tr from-black/30 via-black/20 to-black/40 backdrop-blur-lg border">
       <motion.h2
         className="text-4xl md:text-6xl dancing-font font-extrabold text-center text-lime-400 drop-shadow-lg mb-16 tracking-wide"
         variants={headingVariants}
@@ -114,20 +115,22 @@ const Feature = () => {
             className="bg-zinc-900 bg-opacity-80 text-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center cursor-pointer"
             variants={cardVariants}
             whileHover="hover"
+            initial="hidden"
+            animate="visible"
             viewport={{ once: false }}
           >
             <motion.div
               className="mb-6 text-lime-400 drop-shadow-md"
-              variants={iconVariants}
-              initial="initial"
-              animate="animate"
-              viewport={{ once: false }}
+              variants={iconHoverVariants}
+              whileHover="hover"
             >
-              <Icon className="w-16 h-16" />
+              <Icon className="w-14 h-14" />
             </motion.div>
+
             <h3 className="text-2xl font-semibold mb-3 text-lime-300 tracking-wide">
               {title}
             </h3>
+
             <p className="text-gray-300 text-sm leading-relaxed max-w-xs">
               {description}
             </p>

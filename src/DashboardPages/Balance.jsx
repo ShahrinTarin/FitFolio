@@ -2,8 +2,9 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { FaUserCircle, FaDollarSign } from 'react-icons/fa';
 
-const COLORS = ['#34d399', '#facc15'];
+const COLORS = ['#84cc16', '#facc15']; // lime and yellow
 
 const Balance = () => {
   const axiosSecure = useAxiosSecure();
@@ -25,7 +26,11 @@ const Balance = () => {
   });
 
   if (summaryError || overviewError) {
-    return <div className="p-6 text-red-500">Error loading data</div>;
+    return (
+      <div className="p-6 text-red-500 text-center font-semibold">
+        ⚠️ Error loading data
+      </div>
+    );
   }
 
   const chartData = [
@@ -34,38 +39,62 @@ const Balance = () => {
   ];
 
   return (
-    <div className="p-6 text-white space-y-8">
-      <h2 className="text-3xl font-bold text-lime-400">💰 Admin Balance</h2>
+    <div className="p-8 max-w-11/12 mx-auto text-white space-y-12">
+      <h2 className="text-4xl font-extrabold text-lime-400 text-center mb-8">
+        💰 Admin Balance Overview
+      </h2>
 
-      <div className="bg-gray-900 rounded-lg p-4 border border-lime-400 shadow">
-        <h3 className="text-xl font-semibold mb-2">Total Balance</h3>
-        <p className="text-2xl text-lime-300">
-          ${summary.totalBalance?.toFixed(2) || 0}
+      {/* Total Balance Card */}
+      <div
+        className="bg-gradient-to-r from-lime-900 via-lime-800 to-lime-900
+          rounded-3xl p-8 shadow-[0_10px_20px_rgba(132,204,22,0.4)]
+          border border-lime-600 flex flex-col items-center"
+      >
+        <h3 className="text-2xl font-semibold mb-2 tracking-wide">
+          Total Balance
+        </h3>
+        <p className="text-5xl font-bold text-white flex items-center gap-2">
+          <FaDollarSign className="text-lime-300" />
+          ${summary.totalBalance?.toFixed(2) || '0.00'}
         </p>
       </div>
 
-      <div className="bg-gray-800 p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-3 text-lime-400">
-          🧾 Last 6 Transactions
+      {/* Last 6 Transactions */}
+      <div
+        className="bg-gradient-to-tr from-gray-900 to-gray-800 rounded-2xl p-6
+          shadow-lg border border-lime-600"
+      >
+        <h3 className="text-xl font-semibold mb-5 text-lime-400 flex items-center gap-2">
+          <FaUserCircle /> Last 6 Transactions
         </h3>
-        <ul className="space-y-2 text-sm">
+        <ul className="divide-y divide-gray-700">
           {summary.lastSixTransactions?.map((tx, idx) => (
             <li
               key={idx}
-              className="flex justify-between border-b border-gray-600 pb-1"
+              className="flex justify-between py-3 px-4 hover:bg-lime-700/20 rounded-lg transition cursor-pointer"
+              title={`Transaction by ${tx.userEmail}`}
             >
-              <span>{tx.userEmail}</span>
-              <span>${tx.price}</span>
+              <span className="truncate max-w-[70%]">{tx.userEmail}</span>
+              <span className="font-semibold text-lime-300">${tx.price}</span>
             </li>
-          ))}
+          )) || (
+            <li className="text-center text-gray-400 py-4">
+              No transactions found.
+            </li>
+          )}
         </ul>
       </div>
 
-      <div className="bg-gray-800 p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold mb-3 text-lime-400">
-          📊 Newsletter vs Paid Members
+      {/* Pie Chart */}
+      <div
+        className="bg-gradient-to-tr from-gray-900 to-gray-800 rounded-2xl p-6
+          shadow-lg border border-lime-600"
+      >
+        <h3 className="text-xl font-semibold mb-5 text-lime-400 flex items-center gap-2">
+          📊 Newsletter Subscribers vs Paid Members
         </h3>
-        <div className="h-64 w-full">
+
+        <div className="h-72 w-full max-w-md mx-auto">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -74,16 +103,36 @@ const Balance = () => {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
+                outerRadius={90}
+                label={({ name, percent }) =>
+                  `${name}: ${(percent * 100).toFixed(0)}%`
+                }
+                labelLine={false}
                 fill="#8884d8"
-                label
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                    stroke="#1f2937"
+                    strokeWidth={2}
+                  />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#111827',
+                  borderRadius: '8px',
+                  border: 'none',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
+                itemStyle={{ color: '#84cc16' }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                wrapperStyle={{ color: 'white', fontWeight: '600' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>

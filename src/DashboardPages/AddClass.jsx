@@ -46,84 +46,59 @@ const AddClass = () => {
   };
 
   return (
-    <section className="w-full relative min-h-screen overflow-hidden">
-      {/* Dark black gradient background */}
+    <section className="relative min-h-screen bg-black flex items-center justify-center px-4 py-12 overflow-hidden">
+      {/* Floating neon curves */}
+      <FloatingCurve
+        color="rgba(163, 230, 53, 0.08)"
+        top="10%"
+        left="12%"
+        scaleDuration={38}
+        rotateDuration={62}
+      />
+      <FloatingCurve
+        color="rgba(163, 230, 53, 0.1)"
+        top="72%"
+        left="78%"
+        scaleDuration={43}
+        rotateDuration={68}
+      />
+
+      {/* Glass card */}
       <motion.div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(135deg, #000000, #050505 40%, #0a0a0a 80%)",
-        }}
-        animate={{ scale: [1, 1.02, 1] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-      />
+        className="w-full max-w-4xl p-10 bg-black bg-opacity-50 rounded-3xl border border-lime-400 border-opacity-40 backdrop-blur-md shadow-[0_0_20px_rgba(163,230,53,0.3)]"
+        initial={{ opacity: 0, y: 25, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <h2 className="text-4xl font-extrabold text-lime-400 mb-10 text-center font-mono tracking-wider select-none drop-shadow-[0_0_5px_rgba(163,230,53,0.8)]">
+          Add New Class
+        </h2>
 
-      {/* Lime accent floating curves */}
-      <FloatingCurve
-        color="rgba(163, 230, 53, 0.03)"
-        top="20%"
-        left="15%"
-        scaleDuration={30}
-        rotateDuration={45}
-      />
-      <FloatingCurve
-        color="rgba(163, 230, 53, 0.04)"
-        top="50%"
-        left="75%"
-        scaleDuration={35}
-        rotateDuration={50}
-      />
-      <FloatingCurve
-        color="rgba(163, 230, 53, 0.05)"
-        top="70%"
-        left="30%"
-        scaleDuration={40}
-        rotateDuration={60}
-      />
+        <form onSubmit={handleSubmit} className="space-y-7">
+          <InputField label="Class Name" name="name" value={formData.name} onChange={handleChange} />
+          <InputField label="Image URL" name="image" value={formData.image} onChange={handleChange} />
+          <TextareaField label="Details" name="details" value={formData.details} onChange={handleChange} />
+          <InputField label="Additional Info (optional)" name="extraInfo" value={formData.extraInfo} onChange={handleChange} />
 
-      {/* Form */}
-      <div className="relative flex items-center justify-center min-h-[calc(100vh-80px)] px-4 py-8">
-        <motion.div
-          className="w-full max-w-4xl p-8 bg-transparent backdrop-blur-2xl rounded-xl shadow-2xl text-white"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl font-bold mb-6 text-center text-lime-400 animate-pulse">
-            Add New Class
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <InputField label="Class Name" name="name" value={formData.name} onChange={handleChange} />
-            <InputField label="Image URL" name="image" value={formData.image} onChange={handleChange} />
-            <TextareaField label="Details" name="details" value={formData.details} onChange={handleChange} />
-            <InputField label="Additional Info (optional)" name="extraInfo" value={formData.extraInfo} onChange={handleChange} />
-
-            <div className="text-center pt-2">
-              <motion.button
-                type="submit"
-                disabled={isLoading}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 cursor-pointer bg-lime-500 text-black font-bold rounded hover:bg-lime-600 transition duration-300"
-              >
-                {isLoading ? "Adding..." : "Add Class"}
-              </motion.button>
-            </div>
-          </form>
-        </motion.div>
-      </div>
+          <motion.button
+            type="submit"
+            disabled={isLoading}
+            whileHover={{ scale: 1.06, boxShadow: "0 0 15px #a3e635" }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full cursor-pointer py-4 bg-gradient-to-r from-lime-400 via-lime-500 to-lime-600 text-black font-bold rounded-2xl shadow-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed select-none"
+          >
+            {isLoading ? "Adding..." : "Add Class"}
+          </motion.button>
+        </form>
+      </motion.div>
     </section>
   );
 };
 
 const FloatingCurve = ({ color, top, left, scaleDuration, rotateDuration }) => (
   <motion.svg
-    className="absolute blur-2xl"
-    style={{
-      top: top,
-      left: left,
-      width: "400px",
-      height: "400px",
-    }}
+    className="absolute blur-3xl pointer-events-none select-none"
+    style={{ top: top, left: left, width: "380px", height: "380px" }}
     viewBox="0 0 200 200"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -154,14 +129,22 @@ const FloatingCurve = ({ color, top, left, scaleDuration, rotateDuration }) => (
 
 const InputField = ({ label, name, value, onChange }) => (
   <div>
-    <label className="block text-lime-300 mb-1">{label}</label>
+    <label
+      htmlFor={name}
+      className="block mb-1 text-lime-300 text-sm font-semibold tracking-wide select-none"
+    >
+      {label}
+    </label>
     <input
+      id={name}
       type="text"
       name={name}
       value={value}
       onChange={onChange}
       required={name !== "extraInfo"}
-      className="w-full p-3 rounded bg-gray-800 border border-gray-600 focus:outline-lime-400"
+      autoComplete="off"
+      spellCheck="false"
+      className="w-full rounded-xl bg-transparent border border-lime-600 px-5 py-3 text-white placeholder-lime-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400 shadow-[0_0_8px_rgba(163,230,53,0.5)] transition duration-300"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
@@ -169,14 +152,21 @@ const InputField = ({ label, name, value, onChange }) => (
 
 const TextareaField = ({ label, name, value, onChange }) => (
   <div>
-    <label className="block text-lime-300 mb-1">{label}</label>
+    <label
+      htmlFor={name}
+      className="block mb-1 text-lime-300 text-sm font-semibold tracking-wide select-none"
+    >
+      {label}
+    </label>
     <textarea
+      id={name}
       name={name}
       value={value}
       onChange={onChange}
       required
-      className="w-full p-3 rounded bg-gray-800 border border-gray-600 focus:outline-lime-400"
       rows={4}
+      spellCheck="false"
+      className="w-full rounded-xl bg-transparent border border-lime-600 px-5 py-3 text-white placeholder-lime-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400 shadow-[0_0_8px_rgba(163,230,53,0.5)] transition duration-300 resize-none"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>

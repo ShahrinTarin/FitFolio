@@ -4,6 +4,7 @@ import useAxiosSecure from '@/hooks/useAxiosSecure';
 import Loader from '@/Shared/Loader';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
 
 const LIMIT = 6;
 
@@ -28,41 +29,71 @@ const AllClasses = () => {
 
   return (
     <div className="min-h-screen bg-black text-lime-400 p-6">
-      <h2 className="text-3xl font-bold text-center mb-6">All Classes</h2>
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold text-center mb-6"
+      >
+        All Classes
+      </motion.h2>
 
       {/* Search Bar */}
-    <div className="flex justify-center mb-6">
-  <div className="relative w-full max-w-lg">
-    <input
-      type="search"
-      placeholder="Search classes by name..."
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        setPage(1); // Reset page on new search
-      }}
-      className="w-full pl-12 pr-4 py-3 rounded-full bg-gray-800 text-white placeholder-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
-      spellCheck={false}
-      autoComplete="off"
-    />
-    <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lime-400 text-xl" />
-  </div>
-</div>
+      <div className="flex justify-center mb-6">
+        <div className="relative w-full max-w-lg">
+          <input
+            type="search"
+            placeholder="Search classes by name..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="w-full pl-12 pr-4 py-3 rounded-full bg-gray-800 text-white placeholder-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+            spellCheck={false}
+            autoComplete="off"
+          />
+          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lime-400 text-xl" />
+        </div>
+      </div>
 
       {isLoading ? (
         <Loader />
       ) : classes.length === 0 ? (
         <p className="text-center text-white text-lg mt-10">No classes found.</p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {classes.map((cls) => (
-            <ClassCard key={cls._id} cls={cls} />
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch" // add items-stretch
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+        >
+          {classes.map((cls, index) => (
+            <motion.div
+              key={cls._id}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="flex" 
+            >
+              <ClassCard cls={cls} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Pagination */}
-      <div className="flex justify-center items-center mt-10 gap-3 flex-wrap">
+      <motion.div
+        className="flex justify-center items-center mt-10 gap-3 flex-wrap"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
@@ -92,7 +123,7 @@ const AllClasses = () => {
         >
           Next →
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -109,14 +140,22 @@ const ClassCard = ({ cls }) => {
   });
 
   return (
-    <div className="bg-gray-900 rounded-xl p-4 shadow-md border border-lime-400">
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="bg-gray-900 rounded-xl p-4 shadow-md border border-lime-400 flex flex-col w-full" // flex col + full width
+      style={{ minHeight: '480px' }} 
+    >
       <img
         src={cls.image}
         alt={cls.name}
-        className="w-full h-48 object-cover rounded-lg mb-3"
+        className="w-full h-48 object-cover rounded-lg mb-3 flex-shrink-0"
       />
       <h3 className="text-xl font-semibold">{cls.name}</h3>
-      <p className="text-sm text-gray-300">{cls.details}</p>
+      <p className="text-sm text-gray-300 flex-grow">{cls.details}</p>
       <p className="text-xs text-gray-400 mt-1">{cls.extraInfo}</p>
       <p className="text-xs mt-1">Total Bookings: {cls.bookingCount}</p>
 
@@ -141,7 +180,7 @@ const ClassCard = ({ cls }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

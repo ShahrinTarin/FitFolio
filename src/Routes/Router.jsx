@@ -27,6 +27,7 @@ import BeTrainer from "@/Pages/BeTrainer";
 import TrainerDetails from "@/Pages/TrainerDetailsPage";
 import TrainerBooked from "@/Pages/TrainerBooked";
 import PaymentPage from "@/Pages/PaymentPage";
+import AdminTrainerRoute from "@/Provider/AdminTrainerRoute";
 
 
 
@@ -104,7 +105,7 @@ const router = createBrowserRouter([
       { path: "add-slot", element: <TrainerRoute><AddSlot /></TrainerRoute> },
 
       // // Shared
-      { path: "add-forum", element: <AddForum />}, 
+      { path: "add-forum", element: <AdminTrainerRoute><AddForum /></AdminTrainerRoute>}, 
 
       // // Member
       { path: "activity-log", element: <ActivityLog /> },
