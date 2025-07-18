@@ -34,7 +34,7 @@ const TrainerBooked = () => {
   const { data: classes = [], isLoading: loadingClasses } = useQuery({
     queryKey: ['classes'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/classes');
+      const res = await axios.get('https://fitfolio-server.vercel.app/classes');
       return res.data;
     },
   });
@@ -44,7 +44,7 @@ const TrainerBooked = () => {
     enabled: !!trainer?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:3000/slots/trainers/${trainer.email}`
+        `https://fitfolio-server.vercel.app/slots/trainers/${trainer.email}`
       );
       return res.data;
     },

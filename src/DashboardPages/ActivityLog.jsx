@@ -100,7 +100,7 @@ const ActivityLog = () => {
                     {applicant.status === "rejected" && (
                       <button
                         onClick={() => openModal(applicant.feedback)}
-                        className="text-lg text-lime-700 hover:text-lime-900 transition"
+                        className="text-lg cursor-pointer text-lime-700 hover:text-lime-900 transition"
                         title="View Feedback"
                       >
                         <FaEye />

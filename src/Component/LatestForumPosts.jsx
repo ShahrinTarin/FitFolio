@@ -19,7 +19,7 @@ const LatestForumPosts = () => {
   const { data: posts = [], isLoading, error } = useQuery({
     queryKey: ['forums', 'latest'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/forums/latest');
+      const res = await axios.get('https://fitfolio-server.vercel.app/forums/latest');
       return res.data;
     },
     staleTime: 1000 * 60 * 5,

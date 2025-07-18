@@ -22,7 +22,7 @@ useEffect(() => {
   const { data: trainer, isLoading, isError } = useQuery({
     queryKey: ['trainer', id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:3000/trainerdetails/${id}`);
+      const res = await axios.get(`https://fitfolio-server.vercel.app/trainerdetails/${id}`);
       return res.data;
     },
   });
@@ -32,7 +32,7 @@ useEffect(() => {
     enabled: !!trainer?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:3000/slots/trainers/${trainer.email}`
+        `https://fitfolio-server.vercel.app/slots/trainers/${trainer.email}`
       );
       return res.data;
     },

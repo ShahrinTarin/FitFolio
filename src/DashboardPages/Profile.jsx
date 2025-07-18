@@ -140,7 +140,7 @@ const Profile = () => {
                   <button
                     onClick={handleUpdateProfile}
                     disabled={isUpdating}
-                    className="flex-1 px-6 py-3 bg-lime-500 hover:bg-lime-600 disabled:opacity-50 text-white font-semibold rounded-lg transition"
+                    className="flex-1 px-6 cursor-pointer py-3 bg-lime-500 hover:bg-lime-600 disabled:opacity-50 text-white font-semibold rounded-lg transition"
                   >
                     {isUpdating ? 'Updating...' : 'Save'}
                   </button>
@@ -152,7 +152,7 @@ const Profile = () => {
                       setError(null)
                     }}
                     disabled={isUpdating}
-                    className="flex-1 px-6 py-3 bg-white/30 hover:bg-white/40 disabled:opacity-50 text-black font-semibold rounded-lg transition"
+                    className="flex-1 px-6 cursor-pointer py-3 bg-white/30 hover:bg-white/40 disabled:opacity-50 text-black font-semibold rounded-lg transition"
                   >
                     Cancel
                   </button>
@@ -160,7 +160,7 @@ const Profile = () => {
               ) : (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="w-full sm:w-auto px-8 py-3 bg-lime-500 hover:bg-lime-600 text-white font-semibold rounded-lg transition"
+                  className="w-full cursor-pointer sm:w-auto px-8 py-3 bg-lime-500 hover:bg-lime-600 text-white font-semibold rounded-lg transition"
                 >
                   Update Profile
                 </button>

@@ -22,7 +22,7 @@ const FeaturedClass = () => {
   const { data: featuredClasses = [], isLoading, error } = useQuery({
     queryKey: ['featuredClasses'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/classes/featured');
+      const res = await axios.get('https://fitfolio-server.vercel.app/classes/featured');
       return res.data;
     },
   });

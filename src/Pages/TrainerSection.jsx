@@ -45,7 +45,7 @@ const TrainerSection = () => {
   const { data: trainers = [], isLoading, isError } = useQuery({
     queryKey: ['approvedTrainers'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/trainers/approved');
+      const res = await axios.get('https://fitfolio-server.vercel.app/trainers/approved');
       return res.data;
     },
   });

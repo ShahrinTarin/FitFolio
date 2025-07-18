@@ -14,7 +14,7 @@ const FeedbackModal = ({ feedback, onClose }) => {
         <p className="text-gray-700">{feedback || "No feedback provided."}</p>
         <button
           onClick={onClose}
-          className="mt-6 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition"
+          className="mt-6 cursor-pointer px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition"
         >
           Close
         </button>

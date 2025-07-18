@@ -1,7 +1,7 @@
-# 🏋️‍♂️ FitFolio - Your Fitness Booking Platform
+# 🏋️‍♂️ FitFolio
 
 ## 🌐 Live URL
-[https://fitfolio-by-shahrin-tarin.web.app/](https://fitfolio-by-shahrin-tarin.web.app/)
+[https://fitfolio-by-shahrin.web.app/](https://fitfolio-by-shahrin.web.app/)
 
 ## 📖 Overview
 FitFolio is a modern web application designed to connect fitness enthusiasts with professional trainers. Users can browse trainers, book classes, manage schedules, and make secure payments — all within a clean, intuitive interface. Trainers can manage their classes and slots, while admins oversee the platform.
