@@ -82,10 +82,10 @@ const ReviewCarousel = () => {
                         slidesPerView={1}
                         centeredSlides={true}
                         loop={true}
-                        // autoplay={{
-                        //     delay: 5000,
-                        //     disableOnInteraction: false,
-                        // }}
+                        autoplay={{
+                            delay: 5000,
+                            disableOnInteraction: false,
+                        }}
                         navigation={{
                             prevEl: prevRef.current,
                             nextEl: nextRef.current,

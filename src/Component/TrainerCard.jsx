@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FaFacebook, FaLinkedin } from 'react-icons/fa';
 
 const TrainerCard = ({ trainer, onKnowMore }) => {
   const {
@@ -8,7 +9,6 @@ const TrainerCard = ({ trainer, onKnowMore }) => {
     experience,
     facebook,
     linkedin,
-    otherInfo,
     skills = [],
     availableDays = [],
     availableTime,
@@ -16,118 +16,66 @@ const TrainerCard = ({ trainer, onKnowMore }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05, boxShadow: '0 8px 24px rgba(132, 204, 22, 0.6)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-gradient-to-br from-lime-400 via-white to-black border border-lime-300 rounded-3xl p-6 cursor-pointer select-none"
-      onClick={onKnowMore}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onKnowMore(); }}
-      aria-label={`Know more about trainer ${fullName}`}
+      whileHover={{ scale: 1.02, rotate: 0.2 }}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
+      className="relative rounded-3xl bg-gradient-to-br from-black/70 via-[#0f0f0f]/60 to-black/90 border border-lime-400/30 shadow-2xl backdrop-blur-lg p-6 sm:p-8 text-white overflow-hidden group"
     >
-      <div className="flex flex-col items-center text-center">
-        <div className="relative">
-          <motion.img
-            src={profileImage || 'https://i.ibb.co/gFJ58yVW/user.png'}
-            alt={`${fullName}'s profile`}
-            className="w-28 h-28 rounded-full object-cover border-4 border-black shadow-md"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: 'spring', stiffness: 300 }}
-          />
-          <motion.span
-            animate={{ y: [0, -6, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="absolute bottom-0 right-0 bg-black text-lime-300 text-xs px-3 py-1 rounded-full font-bold shadow-lg select-none"
-          >
-            Trainer
-          </motion.span>
-        </div>
+      {/* Neon Ring Glow */}
+      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-br from-lime-400/20 via-transparent to-lime-400/10 blur-2xl z-0" />
 
-        <h2 className="text-3xl mt-4 font-extrabold text-black uppercase tracking-wide drop-shadow-md">
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+        {/* Avatar */}
+        <motion.img
+          src={profileImage || 'https://i.ibb.co/gFJ58yVW/user.png'}
+          alt="Trainer"
+          className="w-24 h-24 rounded-full border-4 border-lime-400 object-cover shadow-xl"
+          whileHover={{ scale: 1.1 }}
+        />
+
+        {/* Name */}
+        <h2 className="text-2xl font-extrabold tracking-wide text-lime-300 uppercase">
           {fullName}
         </h2>
-        <p className="text-sm text-gray-700 mb-3 font-semibold tracking-wide">
-          Experience: <span className="text-black">{experience} {experience === 1 ? 'year' : 'years'}</span>
+
+        {/* Experience */}
+        <p className="text-gray-400 text-sm">
+          {experience}+ Years Experience
         </p>
 
-        <div className="mt-3 w-full">
-          <p className="text-xs text-gray-500 font-bold uppercase mb-1 tracking-wider">Skills</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {skills.length > 0 ? (
-              skills.map((skill, index) => (
-                <motion.span
-                  key={index}
-                  whileHover={{ scale: 1.2 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                  className="bg-black text-lime-300 px-3 py-1 rounded-full text-xs font-semibold shadow-lg cursor-default select-text"
-                >
-                  {skill}
-                </motion.span>
-              ))
-            ) : (
-              <span className="italic text-gray-400">N/A</span>
-            )}
-          </div>
+        {/* Skills */}
+        <div className="flex flex-wrap justify-center gap-2">
+          {skills.length ? skills.map((skill, idx) => (
+            <span key={idx} className="bg-lime-400/10 border border-lime-300/30 text-lime-300 text-xs px-3 py-1 rounded-full font-medium tracking-wide">
+              {skill}
+            </span>
+          )) : <span className="italic text-gray-500">No skills listed</span>}
         </div>
 
-        <div className="mt-4 text-sm text-gray-700 font-medium tracking-wide">
-          <p>
-            <strong className="text-black">Available:</strong>{' '}
-            {availableDays.length > 0 ? (
-              availableDays.join(', ')
-            ) : (
-              <span className="italic text-gray-400">N/A</span>
-            )}{' '}
-            <span className="font-semibold text-black">({availableTime || 'N/A'})</span>
-          </p>
+        {/* Availability */}
+        <div className="text-xs text-gray-400 mt-1">
+          <strong className="text-white">Available:</strong> {availableDays.join(', ') || 'N/A'} • {availableTime || 'N/A'}
         </div>
 
-        {otherInfo && (
-          <p className="mt-4 px-3 text-center text-sm text-gray-700 font-medium italic tracking-wide">
-            {otherInfo}
-          </p>
-        )}
-
-        <div className="flex gap-6 justify-center mt-5">
+        {/* Socials */}
+        <div className="flex gap-4 text-xl mt-3">
           {facebook && facebook !== 'fs' && (
-            <motion.a
-              href={facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Facebook"
-              whileHover={{ scale: 1.2, color: '#2563EB' }}
-              className="text-blue-600 text-3xl drop-shadow"
-              onClick={e => e.stopPropagation()}
-            >
-              <i className="fab fa-facebook-square" />
-            </motion.a>
+            <a href={facebook} onClick={e => e.stopPropagation()} target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-300">
+              <FaFacebook />
+            </a>
           )}
           {linkedin && linkedin !== 'sf' && (
-            <motion.a
-              href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="LinkedIn"
-              whileHover={{ scale: 1.2, color: '#1E40AF' }}
-              className="text-blue-700 text-3xl drop-shadow"
-              onClick={e => e.stopPropagation()}
-            >
-              <i className="fab fa-linkedin" />
-            </motion.a>
+            <a href={linkedin} onClick={e => e.stopPropagation()} target="_blank" rel="noreferrer" className="text-blue-500 hover:text-blue-400">
+              <FaLinkedin />
+            </a>
           )}
         </div>
 
+        {/* CTA */}
         <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            onKnowMore();
-          }}
           whileHover={{ scale: 1.05, backgroundColor: '#A3E635', color: '#000' }}
-          transition={{ type: 'spring', stiffness: 300 }}
-          className="mt-7 bg-black text-lime-300 px-8 py-3 rounded-full font-bold uppercase tracking-wider shadow-lg"
-          aria-label={`Know more about ${fullName}`}
+          onClick={(e) => { e.stopPropagation(); onKnowMore(); }}
+          className="mt-4 px-6 py-2 border border-lime-300 text-lime-300 font-semibold rounded-full uppercase tracking-widest transition-all duration-300 hover:bg-lime-400 hover:text-black"
         >
           Know More
         </motion.button>

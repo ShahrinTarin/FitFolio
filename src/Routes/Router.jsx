@@ -82,7 +82,7 @@ const router = createBrowserRouter([
         element:<PrivateRoute><PaymentPage></PaymentPage></PrivateRoute>
       },
       {
-        path:"/forums/:id",
+        path:"/forumsdetails/:id",
         element:<PrivateRoute><ForumDetails></ForumDetails></PrivateRoute>
       },
 

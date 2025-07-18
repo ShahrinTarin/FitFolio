@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import Loader from '@/Shared/Loader';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { Helmet } from 'react-helmet-async';
 
 const ForumDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
+      const [pageTitle, setPageTitle] = useState('FitFolio');
+
+  useEffect(() => {
+    const newTitle = 'FitFolio | ForumDetails';
+    setPageTitle(newTitle);
+    document.title = newTitle;
+
+  }, [])
 
   const { data: post, isLoading, isError } = useQuery({
     queryKey: ['forum', id],
@@ -23,8 +32,10 @@ const ForumDetails = () => {
   const { title, image, category, description, createdAt, votes, voters } = post;
 
   return (
-    <div className="relative min-h-screen pt-12 px-4 md:px-8 text-white overflow-hidden">
-
+    <div className="relative min-h-screen mb-5 pt-12 px-4 md:px-8 text-white overflow-hidden">
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
       {/* 📦 Glass-like Card */}
       <div className="relative z-10 max-w-5xl mx-auto bg-white/5 backdrop-blur-lg border border-lime-500/20 shadow-[0_0_40px_#84cc1625] rounded-2xl p-6 md:p-10">
 

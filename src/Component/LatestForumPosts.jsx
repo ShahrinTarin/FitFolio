@@ -90,7 +90,7 @@ const LatestForumPosts = () => {
               </span>
 
               <Link
-                to={`/forums/${post._id}`}
+                to={`/forumsdetails/${post._id}`}
                 className="inline-flex items-center gap-1 text-lime-400 font-semibold hover:underline"
               >
                 Read More <FaArrowRight />

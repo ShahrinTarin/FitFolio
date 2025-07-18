@@ -85,7 +85,7 @@ const ManageSlots = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-lime-300">
+            <tbody className="bg-lime-50 divide-y divide-lime-300">
               {slots.map((slot) => (
                 <tr
                   key={slot._id}
