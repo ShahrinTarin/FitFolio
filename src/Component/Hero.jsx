@@ -46,20 +46,24 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative rounded-3xl border border-white/10 w-full h-[90vh] overflow-hidden shadow-xl">
-      {/* Background Image */}
+    <section className="relative rounded-b-3xl border border-white/10 w-full h-[90vh] overflow-hidden shadow-xl">
+      {/* Background Image with Blur */}
       <motion.div
         key={currentImage}
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
-        style={{ backgroundImage: `url('${bgImages[currentImage]}')` }}
+        className="absolute inset-0 transition-opacity duration-1000"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-      />
+      >
+        <div
+          className="w-full h-full bg-cover bg-center blur-sm scale-105"
+          style={{ backgroundImage: `url('${bgImages[currentImage]}')` }}
+        ></div>
+      </motion.div>
 
-      {/* Blur Overlay */}
+      {/* Overlay */}
       <motion.div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         animate={{ opacity: [0.3, 0.4, 0.3] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -67,24 +71,24 @@ const Hero = () => {
       {/* Arrows */}
       <button
         onClick={goPrev}
-        className="absolute hidden md:block top-1/2 left-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
+        className="absolute hidden md:block top-1/2 left-4 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={20} />
       </button>
       <button
         onClick={goNext}
-        className="absolute md:block hidden top-1/2 right-6 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
+        className="absolute md:block hidden top-1/2 right-4 -translate-y-1/2 z-20 text-white backdrop-blur-sm bg-white/10 hover:bg-white/20 p-3 rounded-full shadow-lg border border-white/10"
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={20} />
       </button>
 
-      {/* Hero Content */}
+      {/* Content */}
       <div
         ref={ref}
         className="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center"
       >
         <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-xl"
+          className="text-3xl sm:text-5xl font-bold leading-tight mb-2 text-white drop-shadow-xl"
           variants={containerVariants}
           initial="hidden"
           animate={controls}
@@ -95,7 +99,7 @@ const Hero = () => {
         </motion.h1>
 
         <motion.p
-          className="text-base sm:text-lg text-gray-200 mb-10 max-w-2xl"
+          className="text-sm sm:text-lg text-gray-200 mb-4 max-w-xl"
           variants={paragraphVariants}
           initial="hidden"
           animate={controls}
@@ -104,25 +108,27 @@ const Hero = () => {
           We help you stay motivated, healthy, and inspired every day.
         </motion.p>
 
-        <Link to='/classes' ><motion.button
-          className="bg-lime-400 text-black cursor-pointer font-semibold py-3 px-8 rounded-full hover:bg-lime-500 transition shadow-md"
-          variants={buttonVariants}
-          initial="hidden"
-          animate={controls}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Let&apos;s Start &gt;&gt;&gt;
-        </motion.button></Link>
+        <Link to="/classes">
+          <motion.button
+            className="bg-lime-400 text-black font-semibold py-2 px-6 rounded-full hover:bg-lime-500 transition shadow-md"
+            variants={buttonVariants}
+            initial="hidden"
+            animate={controls}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Let&apos;s Start &gt;&gt;&gt;
+          </motion.button>
+        </Link>
       </div>
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {bgImages.map((_, idx) => (
           <button
             key={idx}
             onClick={() => goToSlide(idx)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
               idx === currentImage
                 ? "bg-lime-400 shadow-md scale-110"
                 : "bg-white/30 hover:bg-white/50"

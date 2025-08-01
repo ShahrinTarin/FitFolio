@@ -94,7 +94,7 @@ const Forum = () => {
           return (
             <div
               key={post._id}
-              className="bg-gradient-to-br from-[#121212] to-[#1c1c1c] border border-lime-500/40 shadow-lg shadow-lime-400/20 p-6 rounded-2xl mb-8 flex items-start gap-5 transition duration-300 hover:scale-[1.02]"
+              className="bg-gradient-to-br from-[#121212] to-[#1c1c1c] border border-lime-500/40 shadow-lg shadow-lime-400/20 p-6 rounded-2xl mb-8 flex-col md:flex-row flex items-start gap-5 transition duration-300 hover:scale-[1.02]"
             >
               {post.image && (
                 <img
@@ -105,7 +105,7 @@ const Forum = () => {
               )}
 
               <div className="flex-1 space-y-3">
-                <h3 className="text-2xl font-bold text-lime-300">{post.title}</h3>
+                <h3 className="text-2xl flex flex-wrap font-bold text-lime-300 break-words">{post.title}</h3>
                 <p className="text-gray-300 leading-relaxed">{post.description}</p>
 
                 <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mt-2">
@@ -113,12 +113,12 @@ const Forum = () => {
                   <p className="flex items-center gap-2">
                     👤 {post.authorEmail || 'Anonymous'}
                     {post.authorRole === 'admin' && (
-                      <span className="ml-2 px-2 py-0.5 rounded bg-red-600 text-white text-xs font-semibold">
+                      <span className="ml-2 flex flex-wrap px-2 py-0.5 rounded bg-red-600 text-white text-xs font-semibold">
                         Admin
                       </span>
                     )}
                     {post.authorRole === 'trainer' && (
-                      <span className="ml-2 px-2 py-0.5 rounded bg-green-600 text-white text-xs font-semibold">
+                      <span className="ml-2 flex flex-wrap px-2 py-0.5 rounded bg-green-600 text-white text-xs font-semibold">
                         Trainer
                       </span>
                     )}

@@ -53,7 +53,7 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 py-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-xl"
+      className="sticky top-0 z-20  px-4 sm:px-6 py-4 flex justify-between items-center bg-white/10 backdrop-blur-md border border-white/20  shadow-xl"
       initial={{ boxShadow: "0 0 0px #C4F93F" }}
       animate={{
         boxShadow: [

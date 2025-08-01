@@ -33,7 +33,7 @@ const ReviewCarousel = () => {
 
     return (
         <section
-            className="w-full py-20 mb-10 px-4 text-white"
+            className="w-10/12 md:w-11/12 mx-auto py-20 mb-10 px-4 text-white"
             style={{
                 background: `
                     radial-gradient(
