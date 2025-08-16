@@ -68,9 +68,8 @@ FitFolio is a modern web application designed to connect fitness enthusiasts wit
 ## 📦 NPM Packages Used
 
 - ⚛️ react  
-- 🧭 react-router-dom  
-- ⏳ @tanstack/react-query  
-- 🔔 sweetalert2  
+- 🧭 react-router
+- ⏳ @tanstack/react-query
 - 🔑 firebase  
 - 💳 stripe  
 - 🎨 styled-components  
