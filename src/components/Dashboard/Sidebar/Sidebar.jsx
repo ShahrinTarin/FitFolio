@@ -83,11 +83,7 @@ const Sidebar = () => {
                                     <MenuItem icon={FaComments} label='Add new Forum' address='/dashboard/add-forum' />
                                 )
                             }
-                            <MenuItem
-                                icon={FaIdBadge}
-                                label='Profile'
-                                address='/dashboard/profile'
-                            />
+                            
                         </nav>
                     </div>
                 </div>

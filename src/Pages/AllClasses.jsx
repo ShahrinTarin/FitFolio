@@ -78,14 +78,13 @@ const AllClasses = () => {
         </div>
 
         {/* Sort Button */}
-      
-<button
+        <button
           onClick={toggleSort}
           className={`flex items-center max-w-lg justify-center gap-2 px-6 py-3 cursor-pointer rounded-full font-semibold transition w-full md:w-auto ${sort === 'asc'
-              ? 'bg-lime-400 text-black'
-              : sort === 'desc'
-                ? 'bg-lime-500 text-black'
-                : 'bg-gray-800 text-white hover:bg-lime-600'
+            ? 'bg-lime-400 text-black'
+            : sort === 'desc'
+              ? 'bg-lime-500 text-black'
+              : 'bg-gray-800 text-white hover:bg-lime-600'
             }`}
         >
           {sort === 'asc' ? (
@@ -105,10 +104,6 @@ const AllClasses = () => {
             </>
           )}
         </button>
-     
-          
-        
-
       </div>
 
       {isLoading ? (
@@ -161,8 +156,8 @@ const AllClasses = () => {
             key={n}
             onClick={() => setPage(n + 1)}
             className={`px-4 py-2 rounded-full font-semibold transition ${page === n + 1
-                ? 'bg-lime-400 text-black'
-                : 'bg-gray-800 text-white hover:bg-lime-600'
+              ? 'bg-lime-400 text-black'
+              : 'bg-gray-800 text-white hover:bg-lime-600'
               }`}
           >
             {n + 1}
