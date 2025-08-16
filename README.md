@@ -58,7 +58,7 @@ FitFolio is a modern web application designed to connect fitness enthusiasts wit
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** ⚛️ React, 🧭 React Router, 🎨 Tailwind CSS, ⏳ React Query, 🔔 SweetAlert2  
+- **Frontend:** ⚛️ React, 🧭 React Router, 🎨 Tailwind CSS, ⏳ React Query
 - **Backend:** 🟩 Node.js, 🚂 Express.js, 🍃 MongoDB  
 - **Authentication:** 🔑 Firebase Authentication  
 - **Payments:** 💳 Stripe API  
