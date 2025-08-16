@@ -6,27 +6,29 @@ import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-
+import { BiSort, BiSortUp, BiSortDown } from "react-icons/bi";
 const LIMIT = 6;
 
 const AllClasses = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState(''); // '' | 'asc' | 'desc'
   const axiosSecure = useAxiosSecure();
-    const [pageTitle, setPageTitle] = useState('FitFolio');
+  const [pageTitle, setPageTitle] = useState('FitFolio');
 
   useEffect(() => {
     const newTitle = 'FitFolio | AllClasses';
     setPageTitle(newTitle);
     document.title = newTitle;
-
-  }, [])
+  }, []);
 
   const { data: classData = {}, isLoading } = useQuery({
-    queryKey: ['all-classes', page, search],
+    queryKey: ['all-classes', page, search, sort],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/class?page=${page}&limit=${LIMIT}&search=${encodeURIComponent(search)}`
+        `/class?page=${page}&limit=${LIMIT}&search=${encodeURIComponent(
+          search
+        )}&sort=${sort}`
       );
       return res.data;
     },
@@ -36,9 +38,15 @@ const AllClasses = () => {
   const { classes = [], total = 0 } = classData;
   const totalPages = Math.ceil(total / LIMIT);
 
+  // toggle sorting function
+  const toggleSort = () => {
+    setSort((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    setPage(1);
+  };
+
   return (
     <div className="min-h-screen bg-black text-lime-400 p-6">
-       <Helmet>
+      <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
       <motion.h2
@@ -50,8 +58,9 @@ const AllClasses = () => {
         All Classes
       </motion.h2>
 
-      {/* Search Bar */}
-      <div className="flex justify-center mb-6">
+      {/* Search + Sort Bar */}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
+        {/* Search Bar */}
         <div className="relative w-full max-w-lg">
           <input
             type="search"
@@ -67,6 +76,37 @@ const AllClasses = () => {
           />
           <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-lime-400 text-xl" />
         </div>
+
+        {/* Sort Button */}
+        
+          <button
+          onClick={toggleSort}
+          className={`flex items-center max-w-lg justify-center gap-2 px-6 py-3 cursor-pointer rounded-full font-semibold transition w-full md:w-auto ${sort === 'asc'
+              ? 'bg-lime-400 text-black'
+              : sort === 'desc'
+                ? 'bg-lime-500 text-black'
+                : 'bg-gray-800 text-white hover:bg-lime-600'
+            }`}
+        >
+          {sort === 'asc' ? (
+            <>
+              <BiSortUp className="text-xl" />
+              Sort ↑ (Low → High)
+            </>
+          ) : sort === 'desc' ? (
+            <>
+              <BiSortDown className="text-xl" />
+              Sort ↓ (High → Low)
+            </>
+          ) : (
+            <>
+              <BiSort className="text-xl" />
+              Sort by Bookings
+            </>
+          )}
+        </button>
+        
+
       </div>
 
       {isLoading ? (
@@ -75,7 +115,7 @@ const AllClasses = () => {
         <p className="text-center text-white text-lg mt-10">No classes found.</p>
       ) : (
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch" // add items-stretch
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch"
           initial="hidden"
           animate="visible"
           variants={{
@@ -91,7 +131,7 @@ const AllClasses = () => {
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex" 
+              className="flex"
             >
               <ClassCard cls={cls} />
             </motion.div>
@@ -109,7 +149,7 @@ const AllClasses = () => {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className="px-4 py-2 rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
+          className="px-4 cursor-pointer py-2 rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
         >
           ← Prev
         </button>
@@ -118,11 +158,10 @@ const AllClasses = () => {
           <button
             key={n}
             onClick={() => setPage(n + 1)}
-            className={`px-4 py-2 rounded-full font-semibold transition ${
-              page === n + 1
+            className={`px-4 py-2 rounded-full font-semibold transition ${page === n + 1
                 ? 'bg-lime-400 text-black'
                 : 'bg-gray-800 text-white hover:bg-lime-600'
-            }`}
+              }`}
           >
             {n + 1}
           </button>
@@ -131,7 +170,7 @@ const AllClasses = () => {
         <button
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
-          className="px-4 py-2 rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
+          className="px-4 py-2 cursor-pointer rounded-full bg-gray-800 text-white disabled:opacity-50 hover:bg-lime-500 transition"
         >
           Next →
         </button>
@@ -158,8 +197,8 @@ const ClassCard = ({ cls }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="bg-gray-900 rounded-xl p-4 shadow-md border border-lime-400 flex flex-col w-full" // flex col + full width
-      style={{ minHeight: '480px' }} 
+      className="bg-gray-900 rounded-xl p-4 shadow-md border border-lime-400 flex flex-col w-full"
+      style={{ minHeight: '480px' }}
     >
       <img
         src={cls.image}
