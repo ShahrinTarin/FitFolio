@@ -4,7 +4,7 @@ import { AiOutlineBars } from 'react-icons/ai'
 import { AuthContext } from '@/Provider/AuthProvider'
 import AdminMenu from './Menu/AdminMenu'
 import Member from './Menu/Member'
-import { FaComments, FaHome } from 'react-icons/fa'
+import { FaComments, FaHome, FaIdBadge } from 'react-icons/fa'
 import MenuItem from './Menu/MenuItem'
 import { Link } from 'react-router'
 import TrainerMenu from './Menu/TrainerMenu'
@@ -83,6 +83,11 @@ const Sidebar = () => {
                                     <MenuItem icon={FaComments} label='Add new Forum' address='/dashboard/add-forum' />
                                 )
                             }
+                            <MenuItem
+                                icon={FaIdBadge}
+                                label='Profile'
+                                address='/dashboard/profile'
+                            />
                         </nav>
                     </div>
                 </div>
