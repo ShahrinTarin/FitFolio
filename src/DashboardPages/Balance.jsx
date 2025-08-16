@@ -12,7 +12,7 @@ const Balance = () => {
     const [pageTitle, setPageTitle] = useState('FitFolio');
 
   useEffect(() => {
-    const newTitle = 'FitFolio | Balance';
+    const newTitle = 'FitFolio | Overview';
     setPageTitle(newTitle);
     document.title = newTitle;
 
