@@ -78,7 +78,7 @@ const AllClasses = () => {
         </div>
 
         {/* Sort Button */}
-        <div>
+      
 <button
           onClick={toggleSort}
           className={`flex items-center max-w-lg justify-center gap-2 px-6 py-3 cursor-pointer rounded-full font-semibold transition w-full md:w-auto ${sort === 'asc'
@@ -105,7 +105,7 @@ const AllClasses = () => {
             </>
           )}
         </button>
-        </div>
+     
           
         
 
