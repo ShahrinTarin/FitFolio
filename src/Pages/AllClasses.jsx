@@ -12,7 +12,8 @@ const LIMIT = 6;
 const AllClasses = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(''); // '' | 'asc' | 'desc'
+  // '' | 'asc' | 'desc'
+  const [sort, setSort] = useState(''); 
   const axiosSecure = useAxiosSecure();
   const [pageTitle, setPageTitle] = useState('FitFolio');
 
